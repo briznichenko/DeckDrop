@@ -9,6 +9,8 @@
 
 A native macOS folder sender with a matching Steam Deck receiver. Paired transfers require macOS 15+; the original SMB setup assistant remains available on macOS 14+.
 
+The receiver is installed on the configured Steam Deck at `/home/deck/Applications/DeckDrop`, with a **Deck Drop** application-menu entry. A locally built Mac app is available in `dist/Deck Drop.app`. On 2026-10-17, live encrypted copies to both the Deck’s internal storage and microSD passed SHA-256 verification. See the receiver’s validation section for the tested scope and remaining limits.
+
 ## Pair with the Deck app
 
 1. Start the [Steam Deck receiver](SteamDeck/README.md) in Desktop Mode.
@@ -83,3 +85,4 @@ The interface uses SwiftUI and Observation. UI state lives in a MainActor-isolat
 - `Views/`: main screen, sidebar, setup cards, and diagnostics.
 - `Views/Components/`: shared card and instruction views.
 - `Transfer/`: ephemeral TLS identity, read-only HTTPS server, and transfer manifest.
+- `SteamDeck/`: Python receiver, QML frontend, launcher, and protocol/integration tests.

@@ -1,0 +1,7 @@
+#
+#  requirements.txt
+#  DeckDrop
+#
+#  Created by Andrii Bryzhnychenko on 10/17/26.
+#
+PySide6-Essentials==6.12.0
