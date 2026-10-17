@@ -25,6 +25,10 @@
 		000000000000000000000119 /* SharingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000118 /* SharingCard.swift */; };
 		00000000000000000000011B /* TransferHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000011A /* TransferHeader.swift */; };
 		00000000000000000000011D /* TransferSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000011C /* TransferSidebar.swift */; };
+		000000000000000000000301 /* TransferManifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000300 /* TransferManifest.swift */; };
+		000000000000000000000303 /* TransferIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000302 /* TransferIdentity.swift */; };
+		000000000000000000000305 /* TransferServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000304 /* TransferServer.swift */; };
+		000000000000000000000307 /* PairingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000306 /* PairingCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +53,10 @@
 		000000000000000000000118 /* SharingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingCard.swift; sourceTree = "<group>"; };
 		00000000000000000000011A /* TransferHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferHeader.swift; sourceTree = "<group>"; };
 		00000000000000000000011C /* TransferSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferSidebar.swift; sourceTree = "<group>"; };
+		000000000000000000000300 /* TransferManifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferManifest.swift; sourceTree = "<group>"; };
+		000000000000000000000302 /* TransferIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferIdentity.swift; sourceTree = "<group>"; };
+		000000000000000000000304 /* TransferServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferServer.swift; sourceTree = "<group>"; };
+		000000000000000000000306 /* PairingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +84,7 @@
 		000000000000000000000003 /* DeckDrop */ = {
 			isa = PBXGroup;
 			children = (
+				000000000000000000000308 /* Transfer */,
 				000000000000000000000201 /* Views */,
 				000000000000000000000005 /* DeckDropApp.swift */,
 				000000000000000000000100 /* NetworkAddress.swift */,
@@ -97,6 +106,7 @@
 		000000000000000000000201 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				000000000000000000000306 /* PairingCard.swift */,
 				000000000000000000000202 /* Components */,
 				00000000000000000000010E /* ConnectionCard.swift */,
 				000000000000000000000110 /* ContentView.swift */,
@@ -121,6 +131,16 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		000000000000000000000308 /* Transfer */ = {
+            isa = PBXGroup;
+            children = (
+                000000000000000000000300 /* TransferManifest.swift */,
+                000000000000000000000302 /* TransferIdentity.swift */,
+                000000000000000000000304 /* TransferServer.swift */,
+            );
+            path = Transfer;
+            sourceTree = "<group>";
+        };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -184,6 +204,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				000000000000000000000307 /* PairingCard.swift in Sources */,
+				000000000000000000000305 /* TransferServer.swift in Sources */,
+				000000000000000000000303 /* TransferIdentity.swift in Sources */,
+				000000000000000000000301 /* TransferManifest.swift in Sources */,
 				00000000000000000000000A /* DeckDropApp.swift in Sources */,
 				00000000000000000000000B /* SystemProbe.swift in Sources */,
 				000000000000000000000101 /* NetworkAddress.swift in Sources */,

@@ -20,7 +20,61 @@ final class TransferModel {
     var copied = false
     var errorMessage: String?
     var showDiagnostics = false
+    var useSMB = false
+    var startingSession = false
+    var transferSession: TransferSession?
+    private let server = TransferServer()
+    private var sessionTask: Task<Void, Never>?
+    private var sessionGeneration = UUID()
     private let probe = SystemProbe()
+
+    var pairingLink: String {
+        guard let host = addresses.first(where: { $0.id == selectedAddress })?.host ?? addresses.first?.host,
+            let transferSession
+        else { return "" }
+        return transferSession.pairingLink(host: host)
+    }
+
+    func startSharing() {
+        guard let folder, !startingSession, transferSession == nil else { return }
+        startingSession = true
+        let generation = UUID()
+        sessionGeneration = generation
+        sessionTask = Task {
+            defer {
+                if sessionGeneration == generation { startingSession = false }
+            }
+            do {
+                let session = try await server.start(folder: folder)
+                guard !Task.isCancelled, sessionGeneration == generation else { return }
+                transferSession = session
+                copied = false
+            } catch is CancellationError {
+            } catch {
+                guard sessionGeneration == generation else { return }
+                errorMessage = error.localizedDescription
+            }
+        }
+    }
+
+    func stopSharing() {
+        sessionGeneration = UUID()
+        sessionTask?.cancel()
+        transferSession = nil
+        copied = false
+        startingSession = true
+        sessionTask = Task {
+            await server.stop()
+            startingSession = false
+        }
+    }
+
+    func copyPairingLink() {
+        guard !pairingLink.isEmpty else { return }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(pairingLink, forType: .string)
+        copied = true
+    }
 
     var connectionAddress: String {
         addresses.first(where: { $0.id == selectedAddress })?.smbURL ?? addresses.first?.smbURL ?? ""
@@ -42,6 +96,7 @@ final class TransferModel {
     }
 
     func chooseFolder() {
+        guard transferSession == nil, !startingSession else { return }
         let picker = NSOpenPanel()
         picker.canChooseFiles = false
         picker.canChooseDirectories = true

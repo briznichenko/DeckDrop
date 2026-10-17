@@ -58,7 +58,7 @@ struct ConnectionCard: View {
             .textSelection(.enabled)
             .fixedSize(horizontal: false, vertical: true)
             HStack {
-                Text("No folders showing? Check SMB account access in Options.")
+                Text("Login rejected? In Options → Windows File Sharing, tick your Mac account.")
                     .font(.system(size: 10))
                     .foregroundStyle(Palette.muted)
                 Spacer()

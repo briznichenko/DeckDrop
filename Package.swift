@@ -10,5 +10,5 @@ import PackageDescription
 let package = Package(
     name: "DeckDrop",
     platforms: [.macOS(.v14)],
-    targets: [.executableTarget(name: "DeckDrop")]
+    targets: [.executableTarget(name: "DeckDrop", path: "DeckDrop")]
 )

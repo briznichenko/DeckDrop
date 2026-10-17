@@ -7,19 +7,32 @@
 
 # Deck Drop
 
-A native macOS setup assistant for copying folders from a Mac to a Steam Deck over SMB. Requires macOS 14 or later. The included app is built for Apple Silicon.
+A native macOS folder sender with a matching Steam Deck receiver. Paired transfers require macOS 15+; the original SMB setup assistant remains available on macOS 14+.
 
-## Use
+## Pair with the Deck app
+
+1. Start the [Steam Deck receiver](SteamDeck/README.md) in Desktop Mode.
+2. On the Mac, choose a folder and select **Deck app**.
+3. Click **Start sharing**, then **Copy pairing link**.
+4. Transfer the link privately to the Deck, paste it into Deck Drop, and click **Connect**.
+5. Choose an internal-storage or microSD destination and click **Start copying**.
+6. Keep the Mac app open until copying finishes, then click **Stop sharing** to revoke access.
+
+The pairing link combines the server address, a fresh random access key, and a certificate fingerprint. The Deck verifies the encrypted connection before sending the key. No Mac login password or Windows File Sharing setup is required for this flow. Links grant read access to the selected folder and must be kept private. They are not persisted between launches.
+
+Transfers stream to disk and preserve existing destination folders. Interrupted copies are marked incomplete; resume and filesystem metadata preservation are not implemented. See the receiver README for installation, limits, and tests.
+
+## SMB fallback
 
 1. Open Deck Drop.app and choose your source folder.
-2. Click Open Sharing Settings. Enable File Sharing and add that folder to Shared Folders. Under Options, enable SMB and your Mac account. Read-only access is enough for the Deck to copy files from the Mac.
+2. Click Open Sharing Settings. Enable File Sharing and add that folder to Shared Folders. Open Options and enable **Share files and folders using SMB**. Under **Windows File Sharing**, tick your Mac account and enter its Mac login password. This separate account checkbox is required for Steam Deck access, even though the Deck runs Linux. Read-only access is enough for the Deck to copy files from the Mac.
 3. Return to Deck Drop and click Refresh. The status checks whether this Mac accepts a local TCP connection on SMB port 445. It does not test authentication, folder permissions, or reachability from the Deck.
 4. On the same local network, put the Deck in Desktop Mode. In Dolphin, press Ctrl+L and type the displayed smb:// address.
 5. Sign in with your Mac account username and password. Open the shared folder and copy it to your microSD, shown in Dolphin's sidebar.
 
-Keep both devices awake until copying finishes. Deck Drop can be closed during the transfer: macOS serves the files, and Dolphin copies them. Remove the share or disable File Sharing afterward if you no longer need it.
+For the SMB fallback, keep both devices awake until copying finishes. Deck Drop can be closed during the transfer: macOS serves the files, and Dolphin copies them. Remove the share or disable File Sharing afterward if you no longer need it.
 
-## What the app does
+## What the SMB fallback does
 
 - Selects a folder and opens it in Finder.
 - Lists active Wi-Fi/Ethernet/bridge IPv4 addresses, with a selector when there are several.
@@ -28,7 +41,7 @@ Keep both devices awake until copying finishes. Deck Drop can be closed during t
 - Checks for a local SMB listener and displays the system's share listing under Details.
 - Refreshes on activation or on request.
 
-Choosing a folder does not share it automatically. The app does not configure SMB, store credentials, mount the Deck, or copy files itself. Sharing remains controlled by macOS. IPv6-only networks are not supported by the address display. A read-only setup assistant avoids installing a privileged helper for a one-time setup.
+In the SMB fallback, choosing a folder does not share it automatically. That flow does not configure SMB, store credentials, mount the Deck, or copy files itself. Sharing remains controlled by macOS. IPv6-only networks are not supported by the address display. A read-only setup assistant avoids installing a privileged helper for a one-time setup.
 
 ## Build
 
@@ -42,17 +55,17 @@ Install Xcode or its command-line tools with Swift 6 or newer, then run:
 bash build.sh
 ```
 
-This builds a release executable, wraps it in an app bundle in the parent outputs folder, and signs it locally with an ad-hoc signature. No third-party packages are used. The signature is suitable for local use; public distribution would require Developer ID signing and notarization.
+This builds a release executable, wraps it in an app bundle in the parent outputs folder, and signs it locally with an ad-hoc signature. The Mac app uses system frameworks and `/usr/bin/openssl` to create temporary sharing certificates; no third-party Swift packages are used. The Deck receiver uses Qt for Python. The signature is suitable for local use; public distribution would require Developer ID signing and notarization.
 
 The interface uses SwiftUI and Observation. UI state lives in a MainActor-isolated model; blocking system probes run in a separate actor. Cancellation is checked before a completed probe updates the UI. Already-running system commands are allowed to finish; the network probe has a two-second connection timeout.
 
-## Troubleshooting
+## SMB troubleshooting
 
 - No address: connect the Mac to Wi-Fi/Ethernet and refresh.
 - Several addresses: select the interface on the same network as the Deck.
 - SMB not detected: enable File Sharing and SMB in System Settings, then refresh. A failed local probe can also reflect local restrictions.
 - Deck cannot connect: check that the devices are on the same LAN, neither is on an isolated guest network, and macOS firewall settings permit File Sharing.
-- Login rejected: use the Mac account password, not a Steam password or Apple Account password; enable that account for SMB in Options.
+- Login rejected: use the Mac account password, not a Steam password or Apple Account password; in File Sharing → Options → **Windows File Sharing**, tick that account and enter its Mac login password. Enabling the main SMB checkbox alone is not enough.
 - Folder absent: add it to Shared Folders and check that account's access permissions.
 
 ## References
@@ -69,3 +82,4 @@ The interface uses SwiftUI and Observation. UI state lives in a MainActor-isolat
 - `NetworkAddress.swift` and `SystemSnapshot.swift`: values returned by the probe.
 - `Views/`: main screen, sidebar, setup cards, and diagnostics.
 - `Views/Components/`: shared card and instruction views.
+- `Transfer/`: ephemeral TLS identity, read-only HTTPS server, and transfer manifest.

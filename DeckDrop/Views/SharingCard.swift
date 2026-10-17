@@ -31,7 +31,9 @@ struct SharingCard: View {
             VStack(alignment: .leading, spacing: 7) {
                 InstructionRow("1", "Turn on File Sharing, then open its details.")
                 InstructionRow("2", "Add your chosen folder under Shared Folders.")
-                InstructionRow("3", "In Options, enable SMB and your Mac account.")
+                InstructionRow("3", "Open Options and enable ‘Share files and folders using SMB’.")
+                InstructionRow(
+                    "4", "Under Windows File Sharing, tick your Mac account and enter its login password.")
             }
             HStack {
                 Button("Open Sharing Settings", systemImage: "gearshape") { model.openSettings() }

@@ -15,14 +15,14 @@ struct TransferHeader: View {
                     .font(.system(size: 10, weight: .medium, design: .monospaced))
                     .tracking(2)
                 Spacer()
-                Label("No extra Deck apps", systemImage: "checkmark.seal")
+                Label("Your local connection", systemImage: "lock.shield")
                     .font(.system(size: 10))
                     .foregroundStyle(Palette.muted)
             }
             .foregroundStyle(Palette.mint)
             Text("From Mac to Deck.")
                 .font(.system(size: 32, weight: .semibold, design: .rounded))
-            Text("Share a folder. Open it on your Deck. Copy what you need.")
+            Text("Choose a folder. Pair your Deck. Bring your files over.")
                 .font(.system(size: 13))
                 .foregroundStyle(Palette.muted)
         }

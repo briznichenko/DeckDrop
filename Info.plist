@@ -17,5 +17,5 @@
     <key>CFBundleIconFile</key><string>DeckDrop</string>
     <key>LSMinimumSystemVersion</key><string>14.0</string>
     <key>NSHighResolutionCapable</key><true/>
-    <key>NSLocalNetworkUsageDescription</key><string>Show this Mac’s local address and check its SMB service for Steam Deck folder transfers.</string>
+    <key>NSLocalNetworkUsageDescription</key><string>Share your selected folder with Deck Drop on your Steam Deck over an encrypted local connection.</string>
 </dict></plist>

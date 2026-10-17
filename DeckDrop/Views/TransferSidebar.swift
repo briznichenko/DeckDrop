@@ -27,7 +27,9 @@ struct TransferSidebar: View {
                 .padding(.top, 14)
             VStack(alignment: .leading, spacing: 24) {
                 SidebarStep("01", "Pick a folder", icon: "folder", active: model.folder != nil)
-                SidebarStep("02", "Enable sharing", icon: "wifi", active: model.smbListening)
+                SidebarStep(
+                    "02", model.useSMB ? "Enable sharing" : "Pair your Deck", icon: "wifi",
+                    active: model.useSMB ? model.smbListening : model.transferSession != nil)
                 SidebarStep("03", "Copy on Deck", icon: "gamecontroller", active: false)
             }
             .padding(.top, 56)
@@ -39,7 +41,7 @@ struct TransferSidebar: View {
             Text("Your folders.\nA little closer.")
                 .font(.system(size: 18, weight: .medium))
                 .lineSpacing(3)
-            Text("Local network · SMB")
+            Text(model.useSMB ? "Local network · SMB" : "Local network · Encrypted")
                 .font(.system(size: 11))
                 .foregroundStyle(Palette.muted)
                 .padding(.top, 10)

@@ -38,6 +38,7 @@ struct FolderCard: View {
                 Button(model.folder == nil ? "Choose folder…" : "Change…") { model.chooseFolder() }
                     .buttonStyle(.bordered)
                     .controlSize(.large)
+                    .disabled(model.transferSession != nil || model.startingSession)
             }
             if let folder = model.folder {
                 HStack {

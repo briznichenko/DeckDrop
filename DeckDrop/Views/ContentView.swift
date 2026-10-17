@@ -18,8 +18,18 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 22) {
                     TransferHeader()
                     FolderCard(model: model)
-                    SharingCard(model: model)
-                    ConnectionCard(model: model)
+                    Picker("Transfer method", selection: $model.useSMB) {
+                        Text("Deck app").tag(false)
+                        Text("SMB setup").tag(true)
+                    }
+                    .pickerStyle(.segmented)
+                    .disabled(model.transferSession != nil || model.startingSession)
+                    if model.useSMB {
+                        SharingCard(model: model)
+                        ConnectionCard(model: model)
+                    } else {
+                        PairingCard(model: model)
+                    }
                     HStack(spacing: 8) {
                         Image(systemName: "info.circle")
                         Text("Keep both devices awake and on the same local network while copying.")
@@ -36,9 +46,10 @@ struct ContentView: View {
         .onChange(of: phase) { _, value in
             if value == .active { Task { await model.refresh() } }
         }
+        .onChange(of: model.pairingLink) { _, _ in model.copied = false }
         .onChange(of: model.connectionAddress) { _, _ in model.copied = false }
         .alert(
-            "Couldn’t open settings",
+            "Deck Drop",
             isPresented: Binding(
                 get: { model.errorMessage != nil },
                 set: { if !$0 { model.errorMessage = nil } }
