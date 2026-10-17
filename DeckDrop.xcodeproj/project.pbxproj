@@ -1,0 +1,307 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00000000000000000000000A /* DeckDropApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000005 /* DeckDropApp.swift */; };
+		00000000000000000000000B /* SystemProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000006 /* SystemProbe.swift */; };
+		00000000000000000000000C /* DeckDrop.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000007 /* DeckDrop.icns */; };
+		000000000000000000000101 /* NetworkAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000100 /* NetworkAddress.swift */; };
+		000000000000000000000103 /* SystemSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000102 /* SystemSnapshot.swift */; };
+		000000000000000000000105 /* TransferModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000104 /* TransferModel.swift */; };
+		000000000000000000000107 /* CardHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000106 /* CardHeading.swift */; };
+		000000000000000000000109 /* InstructionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000108 /* InstructionRow.swift */; };
+		00000000000000000000010B /* SidebarStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000010A /* SidebarStep.swift */; };
+		00000000000000000000010D /* TransferCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000010C /* TransferCard.swift */; };
+		00000000000000000000010F /* ConnectionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000010E /* ConnectionCard.swift */; };
+		000000000000000000000111 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000110 /* ContentView.swift */; };
+		000000000000000000000113 /* DiagnosticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000112 /* DiagnosticsView.swift */; };
+		000000000000000000000115 /* FolderCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000114 /* FolderCard.swift */; };
+		000000000000000000000117 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000116 /* Palette.swift */; };
+		000000000000000000000119 /* SharingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000118 /* SharingCard.swift */; };
+		00000000000000000000011B /* TransferHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000011A /* TransferHeader.swift */; };
+		00000000000000000000011D /* TransferSidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000011C /* TransferSidebar.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		000000000000000000000005 /* DeckDropApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDropApp.swift; sourceTree = "<group>"; };
+		000000000000000000000006 /* SystemProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemProbe.swift; sourceTree = "<group>"; };
+		000000000000000000000007 /* DeckDrop.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DeckDrop.icns; sourceTree = "<group>"; };
+		000000000000000000000008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		000000000000000000000009 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		00000000000000000000000E /* DeckDrop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeckDrop.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000100 /* NetworkAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAddress.swift; sourceTree = "<group>"; };
+		000000000000000000000102 /* SystemSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemSnapshot.swift; sourceTree = "<group>"; };
+		000000000000000000000104 /* TransferModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferModel.swift; sourceTree = "<group>"; };
+		000000000000000000000106 /* CardHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeading.swift; sourceTree = "<group>"; };
+		000000000000000000000108 /* InstructionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionRow.swift; sourceTree = "<group>"; };
+		00000000000000000000010A /* SidebarStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarStep.swift; sourceTree = "<group>"; };
+		00000000000000000000010C /* TransferCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferCard.swift; sourceTree = "<group>"; };
+		00000000000000000000010E /* ConnectionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionCard.swift; sourceTree = "<group>"; };
+		000000000000000000000110 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		000000000000000000000112 /* DiagnosticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticsView.swift; sourceTree = "<group>"; };
+		000000000000000000000114 /* FolderCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCard.swift; sourceTree = "<group>"; };
+		000000000000000000000116 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
+		000000000000000000000118 /* SharingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingCard.swift; sourceTree = "<group>"; };
+		00000000000000000000011A /* TransferHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferHeader.swift; sourceTree = "<group>"; };
+		00000000000000000000011C /* TransferSidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferSidebar.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		000000000000000000000010 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		000000000000000000000002 = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000003 /* DeckDrop */,
+				000000000000000000000007 /* DeckDrop.icns */,
+				000000000000000000000008 /* Info.plist */,
+				000000000000000000000009 /* README.md */,
+				000000000000000000000004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		000000000000000000000003 /* DeckDrop */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000201 /* Views */,
+				000000000000000000000005 /* DeckDropApp.swift */,
+				000000000000000000000100 /* NetworkAddress.swift */,
+				000000000000000000000006 /* SystemProbe.swift */,
+				000000000000000000000102 /* SystemSnapshot.swift */,
+				000000000000000000000104 /* TransferModel.swift */,
+			);
+			path = DeckDrop;
+			sourceTree = "<group>";
+		};
+		000000000000000000000004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000000E /* DeckDrop.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		000000000000000000000201 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000202 /* Components */,
+				00000000000000000000010E /* ConnectionCard.swift */,
+				000000000000000000000110 /* ContentView.swift */,
+				000000000000000000000112 /* DiagnosticsView.swift */,
+				000000000000000000000114 /* FolderCard.swift */,
+				000000000000000000000116 /* Palette.swift */,
+				000000000000000000000118 /* SharingCard.swift */,
+				00000000000000000000011A /* TransferHeader.swift */,
+				00000000000000000000011C /* TransferSidebar.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		000000000000000000000202 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000106 /* CardHeading.swift */,
+				000000000000000000000108 /* InstructionRow.swift */,
+				00000000000000000000010A /* SidebarStep.swift */,
+				00000000000000000000010C /* TransferCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		00000000000000000000000D /* DeckDrop */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000000000013 /* Build configuration list for PBXNativeTarget "DeckDrop" */;
+			buildPhases = (
+				00000000000000000000000F /* Sources */,
+				000000000000000000000010 /* Frameworks */,
+				000000000000000000000011 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DeckDrop;
+			productName = DeckDrop;
+			productReference = 00000000000000000000000E /* DeckDrop.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		000000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2700;
+			};
+			buildConfigurationList = 000000000000000000000012 /* Build configuration list for PBXProject "DeckDrop" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 000000000000000000000002;
+			productRefGroup = 000000000000000000000004 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				00000000000000000000000D /* DeckDrop */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		000000000000000000000011 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00000000000000000000000C /* DeckDrop.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		00000000000000000000000F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00000000000000000000000A /* DeckDropApp.swift in Sources */,
+				00000000000000000000000B /* SystemProbe.swift in Sources */,
+				000000000000000000000101 /* NetworkAddress.swift in Sources */,
+				000000000000000000000103 /* SystemSnapshot.swift in Sources */,
+				000000000000000000000105 /* TransferModel.swift in Sources */,
+				000000000000000000000107 /* CardHeading.swift in Sources */,
+				000000000000000000000109 /* InstructionRow.swift in Sources */,
+				00000000000000000000010B /* SidebarStep.swift in Sources */,
+				00000000000000000000010D /* TransferCard.swift in Sources */,
+				00000000000000000000010F /* ConnectionCard.swift in Sources */,
+				000000000000000000000111 /* ContentView.swift in Sources */,
+				000000000000000000000113 /* DiagnosticsView.swift in Sources */,
+				000000000000000000000115 /* FolderCard.swift in Sources */,
+				000000000000000000000117 /* Palette.swift in Sources */,
+				000000000000000000000119 /* SharingCard.swift in Sources */,
+				00000000000000000000011B /* TransferHeader.swift in Sources */,
+				00000000000000000000011D /* TransferSidebar.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		000000000000000000000014 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		000000000000000000000015 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		000000000000000000000016 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = local.deckdrop.mac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Debug;
+		};
+		000000000000000000000017 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = local.deckdrop.mac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		000000000000000000000012 /* Build configuration list for PBXProject "DeckDrop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000014 /* Debug */,
+				000000000000000000000015 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		000000000000000000000013 /* Build configuration list for PBXNativeTarget "DeckDrop" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000016 /* Debug */,
+				000000000000000000000017 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 000000000000000000000001 /* Project object */;
+}
