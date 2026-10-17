@@ -30,14 +30,18 @@ python3 main.py
 
 ## Pair and copy
 
-1. Open Deck Drop on the Mac, choose the source folder, and select **Deck app**.
-2. Click **Start sharing**, then **Copy pairing link**.
-3. Transfer the complete link privately to the Deck, paste it into the receiver, and click **Connect**.
+1. Keep the Deck awake in Desktop Mode. On the Mac, choose the source folder and select **Deck app**.
+2. Click **Start sharing**, then **Pair automatically**. Paired sharing requires macOS 15+.
+3. With the existing `steamdeck` SSH connection configured and trusted, the receiver opens automatically and verifies the Mac. The Mac confirms only after the receiver has fetched its folder listing. If a copy is already running, finish or cancel it before pairing again.
 4. Click **Choose folder…** and select a folder on internal storage or your microSD. The location must already exist and be writable.
 5. Click **Start copying**. Keep both devices awake and the Mac app open until completion.
 6. Click **Stop sharing** on the Mac when finished. The link becomes invalid immediately.
 
 No macOS account password or Windows File Sharing setup is used. Paste the link only into Deck Drop: it grants read access to the selected folder while the session is active. Pairing information is held in memory and is not saved between launches.
+
+Automatic pairing expects this receiver folder at `~/Applications/DeckDrop`, a working `systemd-run --user`, and an active KDE Plasma desktop. It launches a transient `deckdrop-receiver` user service, which ends when you close the app and does not start at login. Repeated pairing and launching the app from the menu reuse the existing receiver window. The invitation arrives through SSH standard input and a local socket accessible only to your Deck user. No clipboard or stored invitation is involved. The service's launch messages do not contain the invitation.
+
+Manual pairing remains available: click **Copy pairing link** on the Mac, move it privately to the Deck, paste it into the receiver, and click **Connect**. Device discovery and short numeric codes are not supported.
 
 ## Transfer behavior
 
@@ -76,6 +80,14 @@ QT_QPA_PLATFORM=offscreen DECKDROP_SERVER_BINARY=/tmp/deckdrop-server-harness py
 On 2026-10-17, the receiver was installed on a Steam Deck running Python 3.13.5 and exercised on its live 1280×800 Desktop Mode display. The real Swift HTTPS server on the Mac sent a 33.6 MB test folder over Wi-Fi to both internal storage and microSD. SHA-256 hashes matched for every file, including a Unicode filename and an empty file; empty folders survived. Repeating the copy preserved the original destination and produced a numbered folder. The repeated copies took 22.44 seconds to internal storage and 23.93 seconds to microSD on that network; these are observations, not a throughput guarantee.
 
 The live check drives the receiver’s QML pairing and copy buttons, sets the destination through its controller, and captures the completed window. It does not validate the native folder picker, touch/controller input, or Game Mode. Those remain unverified; Game Mode integration and Flatpak distribution are not included.
+
+Automatic pairing was also verified on this Deck from both the Swift SSH harness and the Mac app's **Pair automatically** button. A closed receiver launched, remained alive after SSH disconnected, and repeated pairing reused the same process. The 13-test local suite covers verified acknowledgement, certificate rejection, refusal while busy, malformed local requests, and the existing transfer flow. A local fake SSH process confirmed cancellation in 0.16 seconds without contacting another device.
+
+Run the pairing checks with Qt and the Swift server available:
+
+```sh
+QT_QPA_PLATFORM=offscreen DECKDROP_SERVER_BINARY=/tmp/deckdrop-server-harness python3 -m unittest discover -s tests -p test_pairing.py -v
+```
 
 To repeat a live check with a running Mac sharing session, save its private pairing link to a local file on the Deck and run:
 

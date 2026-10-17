@@ -12,7 +12,7 @@ struct PairingCard: View {
 
     var body: some View {
         TransferCard {
-            CardHeading("02", "Pair your Deck", subtitle: "One link. No Mac account password.")
+            CardHeading("02", "Pair your Deck", subtitle: "Connect automatically over your existing SSH connection.")
             if let session = model.transferSession {
                 Label("Ready for your Deck", systemImage: "lock.shield")
                     .font(.system(size: 12, weight: .medium))
@@ -29,9 +29,25 @@ struct PairingCard: View {
                         }
                     }
                 }
-                Text("Paste the pairing link into Deck Drop on your Steam Deck. Choose where to save the folder, then start copying.")
+                Text("Open and pair the receiver from here. Your Deck needs to be awake in Desktop Mode.")
                 .font(.system(size: 12))
                 .fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: 12) {
+                    TextField("Deck SSH host", text: $model.sshHost)
+                        .textFieldStyle(.roundedBorder)
+                        .disabled(model.pairing)
+                    Button(model.pairing ? "Pairing…" : "Pair automatically", systemImage: "bolt.horizontal") {
+                        model.pairAutomatically()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(model.pairing || model.sshHost.isEmpty)
+                }
+                if !model.pairingMessage.isEmpty {
+                    Text(model.pairingMessage)
+                        .font(.system(size: 12))
+                        .foregroundStyle(Palette.mint)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 HStack(spacing: 12) {
                     Button(
                         model.copied ? "Link copied" : "Copy pairing link",
@@ -56,9 +72,9 @@ struct PairingCard: View {
                         .foregroundStyle(.orange)
                 }
             } else {
-                InstructionRow("1", "Open Deck Drop in Desktop Mode on your Steam Deck.")
-                InstructionRow("2", "Start sharing here, then copy your private pairing link.")
-                InstructionRow("3", "Paste it on the Deck and choose a destination folder.")
+                InstructionRow("1", "Keep your Steam Deck awake in Desktop Mode.")
+                InstructionRow("2", "Start sharing here, then click Pair automatically.")
+                InstructionRow("3", "Choose a destination on the Deck and start copying.")
                 Button(model.startingSession ? "Preparing…" : "Start sharing", systemImage: "wifi") {
                     model.startSharing()
                 }

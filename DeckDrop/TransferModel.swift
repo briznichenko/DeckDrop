@@ -23,6 +23,11 @@ final class TransferModel {
     var useSMB = false
     var startingSession = false
     var transferSession: TransferSession?
+    var sshHost = UserDefaults.standard.string(forKey: "deckSSHHost") ?? "steamdeck"
+    var pairing = false
+    var pairingMessage = ""
+    private let sshPairing = SSHPairing()
+    private var pairingTask: Task<Void, Never>?
     private let server = TransferServer()
     private var sessionTask: Task<Void, Never>?
     private var sessionGeneration = UUID()
@@ -58,6 +63,9 @@ final class TransferModel {
     }
 
     func stopSharing() {
+        pairingTask?.cancel()
+        pairing = false
+        pairingMessage = ""
         sessionGeneration = UUID()
         sessionTask?.cancel()
         transferSession = nil
@@ -66,6 +74,29 @@ final class TransferModel {
         sessionTask = Task {
             await server.stop()
             startingSession = false
+        }
+    }
+
+    func pairAutomatically() {
+        guard let transferSession, !pairing else { return }
+        let generation = sessionGeneration
+        let host = sshHost.trimmingCharacters(in: .whitespacesAndNewlines)
+        UserDefaults.standard.set(host, forKey: "deckSSHHost")
+        pairing = true
+        pairingMessage = "Opening Deck Drop and verifying the connection…"
+        pairingTask = Task {
+            defer {
+                if sessionGeneration == generation { pairing = false }
+            }
+            do {
+                try await sshPairing.pair(invitation: transferSession.pairingLink(host: "127.0.0.1"), host: host)
+                guard !Task.isCancelled, sessionGeneration == generation else { return }
+                pairingMessage = "Deck paired. Choose a destination on the Deck and start copying."
+            } catch {
+                guard !Task.isCancelled, sessionGeneration == generation else { return }
+                pairingMessage = ""
+                errorMessage = error.localizedDescription
+            }
         }
     }
 

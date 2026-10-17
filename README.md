@@ -13,12 +13,15 @@ The receiver is installed on the configured Steam Deck at `/home/deck/Applicatio
 
 ## Pair with the Deck app
 
-1. Start the [Steam Deck receiver](SteamDeck/README.md) in Desktop Mode.
+1. Keep the Steam Deck awake in Desktop Mode, with the [receiver installed](SteamDeck/README.md).
 2. On the Mac, choose a folder and select **Deck app**.
-3. Click **Start sharing**, then **Copy pairing link**.
-4. Transfer the link privately to the Deck, paste it into Deck Drop, and click **Connect**.
-5. Choose an internal-storage or microSD destination and click **Start copying**.
-6. Keep the Mac app open until copying finishes, then click **Stop sharing** to revoke access.
+3. Click **Start sharing**, then **Pair automatically**. The default SSH host is `steamdeck`; you can enter another existing SSH alias or `deck@address`.
+4. Deck Drop opens on the Deck and verifies the Mac. Choose an internal-storage or microSD destination and click **Start copying**.
+5. Keep the Mac app open until copying finishes, then click **Stop sharing** to revoke access.
+
+Automatic pairing uses your existing SSH configuration, keys, and known-host entries. It requires non-interactive key authentication and an already trusted Deck host; it never accepts a new host key or asks for a password. The receiver must be installed at `~/Applications/DeckDrop`. Its temporary user service keeps the window alive when SSH disconnects; it does not enable startup at login. Only the SSH host preference is saved. Pairing keys travel through encrypted SSH standard input and the Deck's private local socket, without appearing in process arguments or being written to disk. The Deck uses the SSH connection's IPv4 source address to reach the Mac, so no network-interface selection is needed for automatic pairing. VPNs, jump hosts, and IPv6-only routes may require manual pairing.
+
+For manual pairing, click **Copy pairing link**, transfer it privately to the Deck, paste it into the receiver, and click **Connect**. Automatic discovery and short numeric codes are not implemented.
 
 The pairing link combines the server address, a fresh random access key, and a certificate fingerprint. The Deck verifies the encrypted connection before sending the key. No Mac login password or Windows File Sharing setup is required for this flow. Links grant read access to the selected folder and must be kept private. They are not persisted between launches.
 
@@ -85,4 +88,5 @@ The interface uses SwiftUI and Observation. UI state lives in a MainActor-isolat
 - `Views/`: main screen, sidebar, setup cards, and diagnostics.
 - `Views/Components/`: shared card and instruction views.
 - `Transfer/`: ephemeral TLS identity, read-only HTTPS server, and transfer manifest.
+- `Transfer/SSHPairing.swift`: cancellable SSH invitation delivery and verified receiver acknowledgement.
 - `SteamDeck/`: Python receiver, QML frontend, launcher, and protocol/integration tests.

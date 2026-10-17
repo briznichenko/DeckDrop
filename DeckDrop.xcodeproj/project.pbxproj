@@ -29,6 +29,7 @@
 		000000000000000000000303 /* TransferIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000302 /* TransferIdentity.swift */; };
 		000000000000000000000305 /* TransferServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000304 /* TransferServer.swift */; };
 		000000000000000000000307 /* PairingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000306 /* PairingCard.swift */; };
+		00000000000000000000030A /* SSHPairing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000309 /* SSHPairing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		000000000000000000000302 /* TransferIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferIdentity.swift; sourceTree = "<group>"; };
 		000000000000000000000304 /* TransferServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferServer.swift; sourceTree = "<group>"; };
 		000000000000000000000306 /* PairingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingCard.swift; sourceTree = "<group>"; };
+		000000000000000000000309 /* SSHPairing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSHPairing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 		000000000000000000000308 /* Transfer */ = {
             isa = PBXGroup;
             children = (
+                000000000000000000000309 /* SSHPairing.swift */,
                 000000000000000000000300 /* TransferManifest.swift */,
                 000000000000000000000302 /* TransferIdentity.swift */,
                 000000000000000000000304 /* TransferServer.swift */,
@@ -204,6 +207,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00000000000000000000030A /* SSHPairing.swift in Sources */,
 				000000000000000000000307 /* PairingCard.swift in Sources */,
 				000000000000000000000305 /* TransferServer.swift in Sources */,
 				000000000000000000000303 /* TransferIdentity.swift in Sources */,

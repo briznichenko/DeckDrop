@@ -115,7 +115,7 @@ ApplicationWindow {
                     Layout.rightMargin: 32
                     number: "01"
                     heading: backend.paired ? "Your Mac is connected" : "Pair your Mac"
-                    caption: backend.paired ? "Encrypted connection verified with your private pairing link." : "On your Mac, choose a folder → Start sharing → Copy pairing link."
+                    caption: backend.paired ? "Encrypted connection verified with your private pairing link." : "On your Mac: choose a folder → Start sharing → Pair automatically. Or paste a pairing link below."
                     RowLayout {
                         Layout.fillWidth: true
                         visible: !backend.paired
