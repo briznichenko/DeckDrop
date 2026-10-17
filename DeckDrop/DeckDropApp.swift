@@ -15,9 +15,9 @@ struct DeckDropApp: App {
         Window("Deck Drop", id: "main") {
             ContentView(model: model)
                 .preferredColorScheme(.dark)
-                .frame(minWidth: 920, minHeight: 720)
+                .frame(minWidth: 900, minHeight: 660)
         }
-        .defaultSize(width: 1020, height: 790)
+        .defaultSize(width: 1000, height: 700)
         .windowStyle(.hiddenTitleBar)
         .commands {
             CommandGroup(replacing: .newItem) {}

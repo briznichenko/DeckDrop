@@ -15,33 +15,28 @@ struct ContentView: View {
         HStack(spacing: 0) {
             TransferSidebar(model: model)
             ScrollView {
-                VStack(alignment: .leading, spacing: 22) {
+                VStack(alignment: .leading, spacing: 20) {
                     TransferHeader()
                     FolderCard(model: model)
-                    Picker("Transfer method", selection: $model.useSMB) {
-                        Text("Deck app").tag(false)
-                        Text("SMB setup").tag(true)
-                    }
-                    .pickerStyle(.segmented)
-                    .disabled(model.transferSession != nil || model.startingSession)
+                    transferMethod
                     if model.useSMB {
                         SharingCard(model: model)
                         ConnectionCard(model: model)
                     } else {
                         PairingCard(model: model)
+                        copyStep
                     }
-                    HStack(spacing: 8) {
-                        Image(systemName: "info.circle")
-                        Text("Keep both devices awake and on the same local network while copying.")
-                    }
-                    .font(.system(size: 11))
-                    .foregroundStyle(Palette.muted)
+                    Label("Same network · Keep both devices awake.", systemImage: "wifi")
+                        .foregroundStyle(Palette.muted)
                 }
-                .padding(32)
+                .padding(28)
             }
         }
+        .font(Palette.text)
+        .foregroundStyle(.white)
         .background(Palette.background)
         .tint(Palette.mint)
+        .controlSize(.large)
         .task { await model.refresh() }
         .onChange(of: phase) { _, value in
             if value == .active { Task { await model.refresh() } }
@@ -60,5 +55,29 @@ struct ContentView: View {
             Text(model.errorMessage ?? "")
         }
         .sheet(isPresented: $model.showDiagnostics) { DiagnosticsView(model: model) }
+    }
+
+    private var transferMethod: some View {
+        HStack(spacing: 16) {
+            Text("Transfer method")
+                .foregroundStyle(Palette.muted)
+            Picker("Transfer method", selection: $model.useSMB) {
+                Text("Deck app").tag(false)
+                Text("SMB setup").tag(true)
+            }
+            .labelsHidden()
+            .pickerStyle(.segmented)
+            .frame(maxWidth: 260)
+            .disabled(model.transferSession != nil || model.startingSession)
+        }
+    }
+
+    private var copyStep: some View {
+        TransferCard {
+            CardHeading("03", "Copy on Deck")
+            Text("In the Deck receiver, choose a destination and copy. Keep this app open.")
+                .foregroundStyle(Palette.muted)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 }

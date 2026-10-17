@@ -27,10 +27,10 @@ struct SidebarStep: View {
                 .frame(width: 20)
             VStack(alignment: .leading, spacing: 4) {
                 Text(number)
-                    .font(.system(size: 9, design: .monospaced))
+                    .monospacedDigit()
                     .foregroundStyle(Palette.muted)
                 Text(title)
-                    .font(.system(size: 12, weight: .medium))
+                    .fontWeight(.medium)
             }
         }
     }

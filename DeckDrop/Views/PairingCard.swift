@@ -12,15 +12,15 @@ struct PairingCard: View {
 
     var body: some View {
         TransferCard {
-            CardHeading("02", "Pair your Deck", subtitle: "Connect automatically over your existing SSH connection.")
+            CardHeading("02", "Pair your Deck")
             if let session = model.transferSession {
                 Label("Ready for your Deck", systemImage: "lock.shield")
-                    .font(.system(size: 12, weight: .medium))
+                    .font(Palette.text)
                     .foregroundStyle(Palette.mint)
                 Text(
                     "\(session.manifest.files.count) files · \(ByteCountFormatter.string(fromByteCount: session.manifest.totalBytes, countStyle: .file))"
                 )
-                .font(.system(size: 12))
+                .font(Palette.text)
                 .foregroundStyle(Palette.muted)
                 if model.addresses.count > 1 {
                     Picker("Network interface", selection: $model.selectedAddress) {
@@ -29,8 +29,8 @@ struct PairingCard: View {
                         }
                     }
                 }
-                Text("Open and pair the receiver from here. Your Deck needs to be awake in Desktop Mode.")
-                .font(.system(size: 12))
+                Text("Keep your Deck awake in Desktop Mode.")
+                .font(Palette.text)
                 .fixedSize(horizontal: false, vertical: true)
                 HStack(spacing: 12) {
                     TextField("Deck SSH host", text: $model.sshHost)
@@ -44,7 +44,7 @@ struct PairingCard: View {
                 }
                 if !model.pairingMessage.isEmpty {
                     Text(model.pairingMessage)
-                        .font(.system(size: 12))
+                        .font(Palette.text)
                         .foregroundStyle(Palette.mint)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -61,31 +61,24 @@ struct PairingCard: View {
                         .buttonStyle(.bordered)
                 }
                 Text(
-                    "Keep this link private: anyone with it can download this folder while sharing is active. Stop sharing to revoke it. Keep the Mac app open until copying finishes."
+                    "Anyone with the link can download this folder. Stop sharing to revoke access."
                 )
-                .font(.system(size: 11))
+                .font(Palette.text)
                 .foregroundStyle(Palette.muted)
                 .fixedSize(horizontal: false, vertical: true)
                 if model.pairingLink.isEmpty {
-                    Text("No local address found. Connect to Wi-Fi or Ethernet and reopen the window.")
-                        .font(.system(size: 11))
+                    Text("No local address. Connect to Wi-Fi or Ethernet.")
+                        .font(Palette.text)
                         .foregroundStyle(.orange)
                 }
             } else {
-                InstructionRow("1", "Keep your Steam Deck awake in Desktop Mode.")
-                InstructionRow("2", "Start sharing here, then click Pair automatically.")
-                InstructionRow("3", "Choose a destination on the Deck and start copying.")
+                Text("Put your Deck in Desktop Mode. Start sharing, then pair over SSH.")
+                    .foregroundStyle(Palette.muted)
                 Button(model.startingSession ? "Preparing…" : "Start sharing", systemImage: "wifi") {
                     model.startSharing()
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(model.folder == nil || model.startingSession)
-                Text(
-                    "Your selected folder is served directly by Deck Drop. macOS File Sharing can stay off. Requires macOS 15 or later."
-                )
-                .font(.system(size: 11))
-                .foregroundStyle(Palette.muted)
-                .fixedSize(horizontal: false, vertical: true)
             }
         }
     }

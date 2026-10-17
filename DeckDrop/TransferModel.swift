@@ -135,7 +135,32 @@ final class TransferModel {
         picker.prompt = "Choose folder"
         picker.message = "Choose the folder you want to make available to your Steam Deck."
         guard picker.runModal() == .OK, let url = picker.url else { return }
-        folder = url
+        selectFolder([url])
+    }
+
+    @discardableResult
+    func selectFolder(_ urls: [URL]) -> Bool {
+        guard transferSession == nil, !startingSession else { return false }
+        guard urls.count == 1, let url = urls.first, url.isFileURL else {
+            errorMessage = "Choose one local folder."
+            return false
+        }
+        do {
+            let values = try url.resourceValues(forKeys: [.isDirectoryKey, .isPackageKey])
+            guard values.isDirectory == true, values.isPackage != true else {
+                errorMessage = "Choose a folder, rather than a file or app."
+                return false
+            }
+            guard FileManager.default.isReadableFile(atPath: url.path) else {
+                errorMessage = "This folder isn’t readable. Check its permissions or choose another folder."
+                return false
+            }
+            folder = url
+            return true
+        } catch {
+            errorMessage = "Couldn’t open this folder. \(error.localizedDescription)"
+            return false
+        }
     }
 
     func openSettings() {

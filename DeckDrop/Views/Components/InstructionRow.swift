@@ -1,10 +1,3 @@
-//
-//  InstructionRow.swift
-//  DeckDrop
-//
-//  Created by Andrii Bryzhnychenko on 10/17/26.
-//
-
 import SwiftUI
 
 struct InstructionRow: View {
@@ -17,12 +10,12 @@ struct InstructionRow: View {
     }
 
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
             Text(number)
-                .font(.system(size: 10, weight: .semibold, design: .monospaced))
                 .foregroundStyle(Palette.mint)
+                .frame(width: 16)
             Text(text)
-                .font(.system(size: 12))
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }

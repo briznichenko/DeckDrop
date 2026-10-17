@@ -13,8 +13,8 @@ struct ConnectionCard: View {
 
     var body: some View {
         TransferCard {
-            CardHeading(
-                "03", "Over to your Deck", subtitle: "Desktop Mode → Dolphin → Ctrl+L → enter this address")
+            CardHeading("03",
+                "Copy on Deck", subtitle: "Dolphin → Ctrl+L → paste address")
             if model.addresses.count > 1 {
                 Picker("Network interface", selection: $model.selectedAddress) {
                     ForEach(model.addresses) { address in
@@ -22,7 +22,7 @@ struct ConnectionCard: View {
                             .tag(address.id)
                     }
                 }
-                .font(.system(size: 11))
+                .font(Palette.text)
             }
             HStack(spacing: 12) {
                 Image(systemName: "network")
@@ -30,10 +30,9 @@ struct ConnectionCard: View {
                 Text(
                     model.connectionAddress.isEmpty ? "No local IPv4 address found" : model.connectionAddress
                 )
-                .font(.system(size: 20, weight: .medium, design: .monospaced))
+                .font(Palette.text)
                 .textSelection(.enabled)
                 .lineLimit(1)
-                .minimumScaleFactor(0.65)
                 Spacer(minLength: 0)
                 Button {
                     model.copyAddress()
@@ -47,24 +46,23 @@ struct ConnectionCard: View {
                 .disabled(model.connectionAddress.isEmpty)
             }
             .padding(16)
-            .background(Palette.background, in: RoundedRectangle(cornerRadius: 10))
+            .background(Palette.background, in: Rectangle())
             Text(
                 model.connectionAddress.isEmpty
-                    ? "Connect this Mac to Wi-Fi or Ethernet, then refresh."
-                    : "Sign in as \(NSUserName()) with your Mac login password. Open the shared folder, copy it, and paste into your microSD in Dolphin’s sidebar."
+                    ? "Connect to Wi-Fi or Ethernet, then refresh."
+                    : "Sign in as \(NSUserName()) with your Mac password. Copy the shared folder to your Deck."
             )
-            .font(.system(size: 11))
+            .font(Palette.text)
             .foregroundStyle(Palette.muted)
             .textSelection(.enabled)
             .fixedSize(horizontal: false, vertical: true)
             HStack {
-                Text("Login rejected? In Options → Windows File Sharing, tick your Mac account.")
-                    .font(.system(size: 10))
+                Text("Login trouble? Check SMB account access.")
+                    .font(Palette.text)
                     .foregroundStyle(Palette.muted)
                 Spacer()
                 Button("Details") { model.showDiagnostics = true }.buttonStyle(.borderless)
-                    .font(
-                        .system(size: 11))
+                    .font(Palette.text)
             }
         }
     }

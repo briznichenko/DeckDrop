@@ -13,7 +13,7 @@ struct SharingCard: View {
     var body: some View {
         TransferCard {
             HStack(alignment: .top) {
-                CardHeading("02", "Make it available", subtitle: "One-time setup in macOS File Sharing.")
+                CardHeading("02", "Enable sharing")
                 Spacer()
                 HStack(spacing: 6) {
                     Circle()
@@ -23,26 +23,26 @@ struct SharingCard: View {
                         !model.checked
                             ? "Checking…" : model.smbListening ? "SMB listening" : "SMB not detected"
                     )
-                    .font(.system(size: 10, weight: .medium))
+                    .font(Palette.text)
                 }
                 .padding(8)
-                .background(.white.opacity(0.04), in: Capsule())
+                .background(.white.opacity(0.04), in: Rectangle())
             }
             VStack(alignment: .leading, spacing: 7) {
-                InstructionRow("1", "Turn on File Sharing, then open its details.")
-                InstructionRow("2", "Add your chosen folder under Shared Folders.")
-                InstructionRow("3", "Open Options and enable ‘Share files and folders using SMB’.")
+                InstructionRow("1", "Enable File Sharing.")
+                InstructionRow("2", "Add your folder to Shared Folders.")
+                InstructionRow("3", "In Options, enable SMB.")
                 InstructionRow(
-                    "4", "Under Windows File Sharing, tick your Mac account and enter its login password.")
+                    "4", "Enable your Mac account under Windows File Sharing.")
             }
             HStack {
                 Button("Open Sharing Settings", systemImage: "gearshape") { model.openSettings() }
                     .buttonStyle(.plain)
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(Palette.text)
                     .padding(.horizontal, 14)
                     .padding(.vertical, 10)
                     .foregroundStyle(Palette.background)
-                    .background(Palette.mint, in: RoundedRectangle(cornerRadius: 9))
+                    .background(Palette.mint, in: Rectangle())
                 Button {
                     Task { await model.refresh() }
                 } label: {
@@ -53,9 +53,9 @@ struct SharingCard: View {
                 Spacer()
             }
             Text(
-                "Choosing a folder here does not publish it. “SMB listening” checks this Mac only; folder access and the Deck’s connection still need checking."
+                "Add the folder in Settings to share it. SMB status checks this Mac only."
             )
-            .font(.system(size: 10))
+            .font(Palette.text)
             .foregroundStyle(Palette.muted)
             .fixedSize(
                 horizontal: false, vertical: true)

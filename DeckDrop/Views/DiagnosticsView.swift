@@ -13,34 +13,36 @@ struct DiagnosticsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             Text("Connection details")
-                .font(.title2.bold())
+                .font(Palette.text.weight(.semibold))
             Text(
                 "A local SMB listener does not confirm access from your Deck. Guest Wi-Fi isolation, a firewall, or account permissions can still prevent a connection."
             )
             .foregroundStyle(.secondary)
             Text("Configured shares reported by macOS")
-                .font(.headline)
+                .font(Palette.text.weight(.semibold))
             ScrollView {
                 Text(
                     model.shareListing.isEmpty
                         ? "No share information available. Check File Sharing in System Settings."
                         : model.shareListing
                 )
-                .font(.system(size: 12, design: .monospaced))
+                .font(Palette.text)
                 .textSelection(.enabled)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }.frame(height: 200)
             Text(
                 "When you finish, you can remove the shared folder or turn off File Sharing in System Settings. Deck Drop does not store passwords or change sharing settings."
             )
-            .font(.callout)
+            .font(Palette.text)
             .foregroundStyle(.secondary)
             HStack {
                 Button("Open Sharing Settings") { model.openSettings() }
                 Spacer()
                 Button("Done") { model.showDiagnostics = false }.keyboardShortcut(.defaultAction)
             }
-        }.padding(28)
+        }
+            .font(Palette.text)
+            .padding(28)
             .frame(width: 580)
     }
 }
