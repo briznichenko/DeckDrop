@@ -22,7 +22,7 @@ if HAS_QT:
     from PySide6.QtQml import QQmlApplicationEngine
     from PySide6.QtQuick import QQuickWindow
     from PySide6.QtTest import QTest
-    from deckdrop.controller import Controller
+    from deckdrop.presentation.controller import Controller
 
 
 @unittest.skipUnless(HAS_QT and os.environ.get("DECKDROP_SERVER_BINARY"), "Requires Qt for Python and the Swift server harness")
@@ -46,11 +46,12 @@ class FrontendTests(unittest.TestCase):
         controller = Controller()
         engine = QQmlApplicationEngine()
         engine.setInitialProperties({"backend": controller})
-        engine.load(QUrl.fromLocalFile(str(Path(__file__).resolve().parents[1] / "qml/Main.qml")))
+        engine.load(QUrl.fromLocalFile(str(Path(__file__).resolve().parents[1] / "deckdrop/presentation/qml/Main.qml")))
         self.assertTrue(engine.rootObjects())
         window = engine.rootObjects()[0]
         try:
             QTest.qWait(150)
+            window.grabWindow().save("/tmp/deckdrop-deck-unpaired.png")
             input_field = window.findChild(QObject, "pairingInput")
             connect_button = window.findChild(QObject, "connectButton")
             copy_button = window.findChild(QObject, "startCopyButton")

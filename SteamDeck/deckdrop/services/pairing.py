@@ -1,11 +1,12 @@
 import json
+import math
 import os
 from pathlib import Path
 
 from PySide6.QtCore import QObject, QStandardPaths, QTimer, Signal
 from PySide6.QtNetwork import QLocalServer
 
-from .protocol import Pairing, TransferError
+from ..transfer.protocol import Pairing, TransferError
 
 
 def socket_path():
@@ -25,6 +26,8 @@ class PairingInbox(QObject):
         self.server.newConnection.connect(self.accept)
         self.pending = None
         self.clients = {}
+        self.external = None
+        self.timers = {}
         controller.changed.connect(self.completed)
 
     def listen(self):
@@ -45,6 +48,7 @@ class PairingInbox(QObject):
             timer.timeout.connect(lambda client=client: client.abort())
             timer.start(25000)
             self.clients[client] = bytearray()
+            self.timers[client] = timer
             client.readyRead.connect(lambda client=client: self.read(client))
             client.disconnected.connect(lambda client=client: self.disconnected(client))
 
@@ -64,9 +68,20 @@ class PairingInbox(QObject):
             request = json.loads(bytes(data).split(b"\n", 1)[0])
             if not isinstance(request, dict):
                 raise ValueError
+            if request.get("status") is True:
+                self.reply(client, {"state": self.controller.state, "busy": self.controller.busy,
+                                    "externalTransfer": self.controller.externalTransfer,
+                                    "progress": self.controller.progress,
+                                    "remainingText": self.controller.remainingText,
+                                    "folderName": self.controller.folderName})
+                return
             if request.get("activate") is True:
                 self.activate.emit()
                 self.reply(client, {"paired": False})
+                return
+            if request.get("action") == "transfer-status":
+                self.clients[client].clear()
+                self.transfer_status(client, request)
                 return
             invitation = request.get("invitation")
             if not isinstance(invitation, str):
@@ -81,6 +96,52 @@ class PairingInbox(QObject):
         except (ValueError, TypeError, TransferError):
             self.reply(client, {"paired": False, "error": "Invalid pairing request."})
 
+    def transfer_status(self, client, request):
+        event = request.get("event")
+        if event == "start":
+            if self.external is not None or self.pending is not None or self.controller.busy:
+                self.reply(client, {"accepted": False, "error": "Deck Drop is busy."})
+                return
+            name, destination = request.get("name"), request.get("destination")
+            count, total = request.get("count"), request.get("totalBytes")
+            if not isinstance(name, str) or not isinstance(destination, str) or not destination.startswith("/"):
+                raise ValueError
+            if not isinstance(count, int) or not isinstance(total, int) or min(count, total) < 0:
+                raise ValueError
+            self.external = client
+            self.timers[client].stop()
+            self.controller.beginExternalTransfer(name, count, total, destination)
+            self.activate.emit()
+        elif self.external is not client:
+            self.reply(client, {"accepted": False, "error": "No active Mac transfer."})
+            return
+        elif event == "progress":
+            completed, total = request.get("completedBytes"), request.get("totalBytes")
+            current, remaining = request.get("currentFile"), request.get("remainingSeconds")
+            if not isinstance(completed, int) or not isinstance(total, int) or not 0 <= completed <= total:
+                raise ValueError
+            if not isinstance(current, str):
+                raise ValueError
+            if remaining is not None and (not isinstance(remaining, (int, float)) or not math.isfinite(remaining) or remaining < 0):
+                raise ValueError
+            from ..presentation.controller import format_bytes
+            self.controller.progressed(completed / total if total else 1.0,
+                                       f"{format_bytes(completed)} / {format_bytes(total)}", current,
+                                       remaining if remaining is not None else -1)
+        elif event in ("complete", "error"):
+            path, error = request.get("path"), request.get("error")
+            if event == "complete" and (not isinstance(path, str) or not path.startswith("/")):
+                raise ValueError
+            self.external = None
+            self.controller.endExternalTransfer(path=path if event == "complete" else None,
+                                                error=str(error) if error else None)
+            self.reply(client, {"accepted": True})
+            return
+        else:
+            raise ValueError
+        client.write(json.dumps({"accepted": True, "cancelled": self.controller.external_cancel_requested}).encode() + b"\n")
+        client.flush()
+
     def completed(self):
         if self.pending is None or self.controller.busy:
             return
@@ -93,6 +154,10 @@ class PairingInbox(QObject):
         client.disconnectFromServer()
 
     def disconnected(self, client):
+        if self.external is client:
+            self.external = None
+            self.controller.endExternalTransfer()
+        self.timers.pop(client, None)
         if self.pending is client:
             self.pending = None
         self.clients.pop(client, None)

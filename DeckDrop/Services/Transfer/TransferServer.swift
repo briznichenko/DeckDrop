@@ -119,6 +119,12 @@ actor TransferServer {
                 let header = try await readHeader(connection)
                 waitingForHeader.remove(id)
                 try await respond(header, connection: connection)
+                let timeout = Task {
+                    do { try await Task.sleep(for: .seconds(30)) } catch { return }
+                    if let active = connections[id], active === connection { close(id) }
+                }
+                defer { timeout.cancel() }
+                try await finishResponse(on: connection)
             } catch {}
             close(id)
         }
@@ -168,6 +174,17 @@ actor TransferServer {
                     if let error { continuation.resume(throwing: error) } else { continuation.resume() }
                 })
         }
+    }
+
+    private func finishResponse(on connection: NWConnection) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            connection.send(
+                content: nil, contentContext: .finalMessage, isComplete: true,
+                completion: .contentProcessed { error in
+                    if let error { continuation.resume(throwing: error) } else { continuation.resume() }
+                })
+        }
+        while !(try await receive(connection)).isEmpty {}
     }
 
     private func respond(_ header: String, connection: NWConnection) async throws {

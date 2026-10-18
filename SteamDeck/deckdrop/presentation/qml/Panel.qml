@@ -1,10 +1,3 @@
-//
-//  Panel.qml
-//  DeckDrop
-//
-//  Created by Andrii Bryzhnychenko on 10/17/26.
-//
-
 import QtQuick
 import QtQuick.Layouts
 
@@ -14,39 +7,37 @@ Rectangle {
     property string number: ""
     property string heading: ""
     property string caption: ""
-    implicitHeight: inner.implicitHeight + 40
-    color: "#1b1f21"
-    radius: 15
-    border.color: "#2b3032"
+    implicitHeight: inner.implicitHeight + Theme.panelPadding * 2
+    color: Theme.panel
     ColumnLayout {
         id: inner
-        anchors { left: parent.left; right: parent.right; top: parent.top; margins: 20 }
-        spacing: 16
+        anchors { left: parent.left; right: parent.right; top: parent.top; margins: Theme.panelPadding }
+        spacing: Theme.contentSpacing
         RowLayout {
             Layout.fillWidth: true
             spacing: 12
             Text {
                 text: panel.number
-                color: "#abe8ab"
-                font { pixelSize: 12; family: "monospace" }
+                color: Theme.accent
+                font.pixelSize: Theme.textSize
                 Layout.alignment: Qt.AlignTop
-                Layout.topMargin: 3
             }
             ColumnLayout {
                 Layout.fillWidth: true
-                spacing: 5
+                spacing: 8
                 Text {
                     Layout.fillWidth: true
                     text: panel.heading
-                    color: "#eeeeee"
-                    font { pixelSize: 16; weight: Font.DemiBold }
+                    color: Theme.text
+                    font { pixelSize: Theme.textSize; weight: Font.DemiBold }
                     wrapMode: Text.Wrap
                 }
                 Text {
                     Layout.fillWidth: true
+                    visible: panel.caption.length > 0
                     text: panel.caption
-                    color: "#99a6a6"
-                    font.pixelSize: 12
+                    color: Theme.muted
+                    font.pixelSize: Theme.textSize
                     wrapMode: Text.Wrap
                 }
             }

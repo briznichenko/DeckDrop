@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @Bindable var model: TransferModel
     @Environment(\.scenePhase) private var phase
+    @State private var saveAsDefault = false
 
     var body: some View {
         HStack(spacing: 0) {
@@ -55,6 +56,9 @@ struct ContentView: View {
             Text(model.errorMessage ?? "")
         }
         .sheet(isPresented: $model.showDiagnostics) { DiagnosticsView(model: model) }
+        .sheet(isPresented: $model.showTransferConfirmation) {
+            transferConfirmation
+        }
     }
 
     private var transferMethod: some View {
@@ -68,16 +72,99 @@ struct ContentView: View {
             .labelsHidden()
             .pickerStyle(.segmented)
             .frame(maxWidth: 260)
-            .disabled(model.transferSession != nil || model.startingSession)
+            .disabled(model.transferSession != nil || model.startingSession || model.quickTransferring)
         }
     }
 
     private var copyStep: some View {
         TransferCard {
             CardHeading("03", "Copy on Deck")
-            Text("In the Deck receiver, choose a destination and copy. Keep this app open.")
-                .foregroundStyle(Palette.muted)
-                .fixedSize(horizontal: false, vertical: true)
+            if let progress = model.transferProgress {
+                VStack(alignment: .leading, spacing: 8) {
+                    GeometryReader { geometry in
+                        Rectangle().fill(Palette.background)
+                        Rectangle().fill(Palette.mint)
+                            .frame(width: geometry.size.width * progress.fraction)
+                    }
+                    .frame(height: 6)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Transfer progress")
+                    .accessibilityValue(Text(progress.fraction, format: .percent.precision(.fractionLength(0))))
+                    HStack(spacing: 16) {
+                        Text(progress.currentFile == "Done" ? "" : progress.currentFile)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Text(progress.fraction, format: .percent.precision(.fractionLength(0)))
+                        Text("\(ByteCountFormatter.string(fromByteCount: progress.completedBytes, countStyle: .decimal)) / \(ByteCountFormatter.string(fromByteCount: progress.totalBytes, countStyle: .decimal))")
+                    }
+                    .foregroundStyle(Palette.muted)
+                    if model.quickTransferring {
+                        Text(progress.fraction >= 1 ? "Finishing…" : progress.remainingText)
+                            .foregroundStyle(Palette.muted)
+                    }
+                }
+            } else if model.quickTransferring {
+                ProgressView().progressViewStyle(.linear)
+                    .accessibilityLabel("Preparing transfer")
+            }
+            if model.quickTransferring {
+                HStack(spacing: 12) {
+                    Text(model.transferMessage)
+                    Spacer()
+                    Button("Cancel") { model.stopSharing() }
+                }
+            } else if !model.transferMessage.isEmpty {
+                Label(model.transferMessage, systemImage: model.completedDestination.isEmpty ? "info.circle" : "checkmark.circle.fill")
+                    .foregroundStyle(Palette.mint)
+                if !model.completedDestination.isEmpty {
+                    Text(model.completedDestination)
+                        .foregroundStyle(Palette.muted)
+                        .textSelection(.enabled)
+                }
+            } else {
+                Text("Drop a folder, confirm, and keep this app open.")
+                    .foregroundStyle(Palette.muted)
+            }
         }
+    }
+
+    private var transferConfirmation: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            Text("Transfer \(model.folder?.lastPathComponent ?? "folder")")
+                .fontWeight(.semibold)
+            Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 16) {
+                GridRow {
+                    Text("Deck host")
+                    TextField("steamdeck", text: $model.sshHost)
+                }
+                GridRow {
+                    Text("Destination")
+                    TextField("/run/media/deck/your-card", text: $model.deckDestination)
+                }
+            }
+            .textFieldStyle(.roundedBorder)
+            Toggle("Save as default", isOn: $saveAsDefault)
+                .toggleStyle(.checkbox)
+            Text("Existing folders are kept. Copies get a numbered name.")
+                .foregroundStyle(Palette.muted)
+            HStack {
+                Button("Cancel") { model.showTransferConfirmation = false }
+                    .keyboardShortcut(.cancelAction)
+                Spacer()
+                Button("OK") {
+                    if saveAsDefault { model.saveTransferDefaults() }
+                    model.transferFolder()
+                }
+                .keyboardShortcut(.defaultAction)
+                .buttonStyle(.borderedProminent)
+                .disabled(model.sshHost.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    || model.deckDestination.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+        }
+        .font(Palette.text)
+        .padding(28)
+        .frame(width: 520)
+        .onAppear { saveAsDefault = false }
     }
 }

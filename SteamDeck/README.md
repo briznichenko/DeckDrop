@@ -7,7 +7,9 @@
 
 # Deck Drop for Steam Deck
 
-A small Desktop Mode receiver using Python 3.10+ and Qt Quick/QML. It keeps the Mac app’s dark panels, mint accents, and three-step layout.
+A small Desktop Mode receiver using Python 3.10+ and Qt Quick/QML. It matches the Mac app’s neutral square panels, mint accent, uniform text size, and sidebar with three expanded steps. Shared QML design tokens live in `deckdrop/presentation/qml/Theme.qml`; the cross-platform UI convention is recorded in [the UI specification](../specs/ui.md).
+
+See [architecture and the complete file tree](../specs/architecture.md) for the receiver layers and [the specification index](../specs/README.md) for the shared behavior and protocol.
 
 ## Start the receiver
 
@@ -28,7 +30,11 @@ python3 -m pip install -r requirements.txt
 python3 main.py
 ```
 
-## Pair and copy
+## Automatic copy from the Mac
+
+Update the complete receiver source folder on the Deck when updating the Mac app, including `pair.py` and the `deckdrop` package. Drop a folder on the Mac, enter the Deck destination in its confirmation, optionally check **Save as default**, and click **OK**. Later drops reuse those saved settings. The helper copies through the same certificate-pinned HTTPS client over a temporary SSH tunnel and confirms completion to the Mac while reporting progress to the receiver window. Missing or unwritable destinations fail; existing folders receive numbered copies. Saved paths live in the Mac app's preferences, while invitation keys remain ephemeral.
+
+## Pair and copy manually
 
 1. Keep the Deck awake in Desktop Mode. On the Mac, choose the source folder and select **Deck app**.
 2. Click **Start sharing**, then **Pair automatically**. Paired sharing requires macOS 15+.
@@ -67,7 +73,7 @@ python3 -m unittest discover -s tests -p test_protocol.py -v
 The optional integration tests use the real Swift server. From the repository root on a Mac:
 
 ```sh
-xcrun swiftc -swift-version 6 -parse-as-library DeckDrop/Transfer/*.swift Tests/Fixtures/TransferServerHarness.swift -o /tmp/deckdrop-server-harness
+xcrun swiftc -swift-version 6 -parse-as-library DeckDrop/Models/TransferManifest.swift DeckDrop/Services/Transfer/*.swift Tests/MacOS/Harnesses/TransferServerHarness.swift -o /tmp/deckdrop-server-harness
 DECKDROP_SERVER_BINARY=/tmp/deckdrop-server-harness python3 -m unittest discover -s SteamDeck/tests -p test_protocol.py -v
 ```
 
@@ -96,3 +102,5 @@ To repeat a live check with a running Mac sharing session, save its private pair
 ```
 
 The check copies the shared folder and prints SHA-256 hashes for comparison with the source. It keeps received files. Its empty-folder check expects the generated verification fixture’s `empty folder` directory.
+
+On 2026-10-17, the updated automatic-transfer path was also verified with a 34.1 MB copy to a temporary Deck destination. The Mac received live byte counts and time estimates; the installed Deck receiver reported the matching copying/completed states, and the destination SHA-256 matched. The local 23-test suite covers automatic-transfer display updates, cancellation from the Deck, helper disconnects, busy-receiver protection, time estimation, and the existing copy protocol.

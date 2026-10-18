@@ -19,7 +19,7 @@ import unittest
 from dataclasses import replace
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from deckdrop.protocol import Cancelled, Client, Pairing, PinnedConnection, TransferError, validate_manifest
+from deckdrop.transfer.protocol import Cancelled, Client, Pairing, PinnedConnection, TransferError, validate_manifest
 
 
 class ProtocolTests(unittest.TestCase):
@@ -100,6 +100,20 @@ class SwiftIntegrationTests(unittest.TestCase):
         self.assertEqual((destination / "Games/existing.txt").read_text(), "keep")
         self.assertTrue((final / "empty-folder").is_dir())
         self.assertEqual((final / "empty.txt").stat().st_size, 0)
+
+    def test_response_is_not_truncated_when_receiver_reads_slowly(self):
+        manifest = self.client.manifest()
+        file = next(file for file in manifest["files"] if file["size"] > 0)
+        connection, response = self.client.request(f"/files/{file['id']}")
+        try:
+            time.sleep(.15)
+            received = bytearray()
+            while chunk := response.read(65536):
+                received.extend(chunk)
+                time.sleep(.002)
+            self.assertEqual(bytes(received), self.payload)
+        finally:
+            connection.close()
 
     def test_wrong_certificate_is_rejected_before_authorization(self):
         client = Client(replace(self.pairing, fingerprint="0" * 64))

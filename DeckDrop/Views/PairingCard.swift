@@ -13,7 +13,10 @@ struct PairingCard: View {
     var body: some View {
         TransferCard {
             CardHeading("02", "Pair your Deck")
-            if let session = model.transferSession {
+            if model.quickTransferring {
+                Label("Automatic transfer over SSH", systemImage: "lock.shield")
+                    .foregroundStyle(Palette.muted)
+            } else if let session = model.transferSession {
                 Label("Ready for your Deck", systemImage: "lock.shield")
                     .font(Palette.text)
                     .foregroundStyle(Palette.mint)
@@ -72,13 +75,18 @@ struct PairingCard: View {
                         .foregroundStyle(.orange)
                 }
             } else {
-                Text("Put your Deck in Desktop Mode. Start sharing, then pair over SSH.")
+                Text(model.deckDestination.isEmpty ? "Choose a destination when you transfer." : "\(model.sshHost) · \(model.deckDestination)")
                     .foregroundStyle(Palette.muted)
-                Button(model.startingSession ? "Preparing…" : "Start sharing", systemImage: "wifi") {
-                    model.startSharing()
+                    .textSelection(.enabled)
+                Button("Transfer…", systemImage: "arrow.right") {
+                    model.showTransferConfirmation = true
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(model.folder == nil || model.startingSession)
+                DisclosureGroup("Manual sharing") {
+                    Button("Start sharing") { model.startSharing() }
+                        .disabled(model.folder == nil || model.startingSession)
+                }
             }
         }
     }

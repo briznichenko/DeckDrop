@@ -11,15 +11,19 @@ A native macOS folder sender with a matching Steam Deck receiver. Paired transfe
 
 The receiver is installed on the configured Steam Deck at `/home/deck/Applications/DeckDrop`, with a **Deck Drop** application-menu entry. A locally built Mac app is available in `dist/Deck Drop.app`. On 2026-10-17, live encrypted copies to both the Deck’s internal storage and microSD passed SHA-256 verification. See the receiver’s validation section for the tested scope and remaining limits.
 
-## Pair with the Deck app
+## Transfer with the Deck app
 
-1. Keep the Steam Deck awake in Desktop Mode, with the [receiver installed](SteamDeck/README.md).
-2. On the Mac, choose a folder and select **Deck app**.
-3. Click **Start sharing**, then **Pair automatically**. The default SSH host is `steamdeck`; you can enter another existing SSH alias or `deck@address`.
-4. Deck Drop opens on the Deck and verifies the Mac. Choose an internal-storage or microSD destination and click **Start copying**.
-5. Keep the Mac app open until copying finishes, then click **Stop sharing** to revoke access.
+1. Install the [receiver](SteamDeck/README.md) at `~/Applications/DeckDrop` and configure a trusted, non-interactive SSH connection to the Deck.
+2. Drop a folder into **Choose a folder**, or use the folder picker.
+3. In the confirmation, enter the Deck host and destination path. For a microSD, use its actual mounted path under `/run/media/deck/`. The destination must already exist and be writable.
+4. Check **Save as default** to remember the host, destination, and source selection between launches. Leaving it unchecked changes this run only.
+5. Click **OK**. The Mac prepares sharing, the Deck copies the folder, and the Mac stops sharing after the copy completes. Subsequent transfers are **drop → OK → transferred**.
 
-Automatic pairing uses your existing SSH configuration, keys, and known-host entries. It requires non-interactive key authentication and an already trusted Deck host; it never accepts a new host key or asks for a password. The receiver must be installed at `~/Applications/DeckDrop`. Its temporary user service keeps the window alive when SSH disconnects; it does not enable startup at login. Only the SSH host preference is saved. Pairing keys travel through encrypted SSH standard input and the Deck's private local socket, without appearing in process arguments or being written to disk. The Deck uses the SSH connection's IPv4 source address to reach the Mac, so no network-interface selection is needed for automatic pairing. VPNs, jump hosts, and IPv6-only routes may require manual pairing.
+The Mac shows **Transferred** only after the Deck confirms the completed destination. Existing folders are preserved and repeated copies receive numbered names. A missing microSD or invalid destination fails without falling back to another drive. **Cancel** stops the SSH helper and revokes the sharing session; interrupted copies may leave an `.incomplete-…` folder. Keep both devices awake and the Mac app open until completion.
+
+Automatic transfers use the existing pinned HTTPS protocol and SSH configuration, keys, and known-host entries. SSH requires non-interactive key authentication and an already trusted Deck host; the app never accepts a new host key or asks for a password. The helper receives the invitation and destination as JSON over encrypted standard input. Pairing keys are not saved or placed in process arguments. A temporary loopback-only reverse SSH tunnel carries the HTTPS connection back to the Mac, avoiding incoming firewall ports. The tunnel closes with the SSH helper. The helper opens or reuses the Deck receiver window to display progress; the copy does not require clicking its controls. Manual receiver pairing still uses the Mac’s IPv4 address.
+
+For the original receiver workflow, expand **Manual sharing**, start sharing, then click **Pair automatically**. This opens the receiver in Desktop Mode so you can choose the destination and start copying there.
 
 For manual pairing, click **Copy pairing link**, transfer it privately to the Deck, paste it into the receiver, and click **Connect**. Automatic discovery and short numeric codes are not implemented.
 
@@ -57,12 +61,14 @@ The Swift package and packaging script are also available:
 Install Xcode or its command-line tools with Swift 6 or newer, then run:
 
 ```sh
-bash build.sh
+bash Scripts/build-macos.sh
 ```
 
-This builds a release executable, wraps it in an app bundle in the parent outputs folder, and signs it locally with an ad-hoc signature. The Mac app uses system frameworks and `/usr/bin/openssl` to create temporary sharing certificates; no third-party Swift packages are used. The Deck receiver uses Qt for Python. The signature is suitable for local use; public distribution would require Developer ID signing and notarization.
+This builds a release executable, wraps it in `dist/Deck Drop.app`, and signs it locally with an ad-hoc signature. The Mac app uses system frameworks and `/usr/bin/openssl` to create temporary sharing certificates; no third-party Swift packages are used. The Deck receiver uses Qt for Python. The signature is suitable for local use; public distribution would require Developer ID signing and notarization.
 
 The interface uses SwiftUI and Observation. UI state lives in a MainActor-isolated model; blocking system probes run in a separate actor. Cancellation is checked before a completed probe updates the UI. Already-running system commands are allowed to finish; the network probe has a two-second connection timeout.
+
+Automatic transfers show byte-based progress, percentage, the current file, and estimated time remaining on both devices. The Deck app opens for a Mac-started transfer, shows “Mac connected”, and supports cancellation from either device. Update the Deck receiver from the same source version to enable progress reporting. The bar shows “Finishing…” after all bytes arrive until the Deck confirms the completed folder; cancellation and failures retain the last reported progress.
 
 ## SMB troubleshooting
 
@@ -79,14 +85,12 @@ The interface uses SwiftUI and Observation. UI state lives in a MainActor-isolat
 - [Apple: Set up SMB file sharing](https://support.apple.com/guide/mac-help/set-up-smb-file-sharing-on-mac-mh14107/mac)
 - [KDE: Network folders in Dolphin](https://docs.kde.org/trunk_kf6/en/plasma-desktop/knetattach/using-knetattach.html)
 
-## Source layout
+## Project structure and specifications
 
-- `DeckDropApp.swift`: app entry point and window configuration.
-- `TransferModel.swift`: observable UI state and user actions.
-- `SystemProbe.swift`: system commands and local network discovery.
-- `NetworkAddress.swift` and `SystemSnapshot.swift`: values returned by the probe.
-- `Views/`: main screen, sidebar, setup cards, and diagnostics.
-- `Views/Components/`: shared card and instruction views.
-- `Transfer/`: ephemeral TLS identity, read-only HTTPS server, and transfer manifest.
-- `Transfer/SSHPairing.swift`: cancellable SSH invitation delivery and verified receiver acknowledgement.
-- `SteamDeck/`: Python receiver, QML frontend, launcher, and protocol/integration tests.
+The Mac source is organized into `App`, `Models`, `ViewModels`, `Views`, `Services`, and `Resources`. The Deck receiver separates `presentation`, `services`, and `transfer` inside its Python package. Xcode groups mirror the Mac source folders.
+
+See [the complete file tree and architecture](specs/architecture.md) and [specification index](specs/README.md) for layer responsibilities, product behavior, the transfer protocol, and shared UI conventions. [Verification](specs/verification.md) describes repeatable builds and tests.
+
+Run the existing local checks with `bash Scripts/test-local.sh`. To include Qt integration tests, set `DECKDROP_PYTHON` to a Python environment containing `SteamDeck/requirements.txt`.
+
+Local AI guidance, reports, and scratch work live under ignored `.local/`. They are not needed to build or run either app.

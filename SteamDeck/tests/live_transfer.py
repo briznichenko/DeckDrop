@@ -15,7 +15,7 @@ from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuick import QQuickWindow
 from PySide6.QtTest import QTest
 
-from deckdrop.controller import Controller
+from deckdrop.presentation.controller import Controller
 
 
 def main():
@@ -28,7 +28,7 @@ def main():
     controller = Controller()
     engine = QQmlApplicationEngine()
     engine.setInitialProperties({"backend": controller})
-    engine.load(QUrl.fromLocalFile(str(Path(__file__).resolve().parents[1] / "qml/Main.qml")))
+    engine.load(QUrl.fromLocalFile(str(Path(__file__).resolve().parents[1] / "deckdrop/presentation/qml/Main.qml")))
     if not engine.rootObjects():
         raise RuntimeError("Receiver window did not load")
     window = engine.rootObjects()[0]

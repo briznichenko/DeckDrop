@@ -14,7 +14,8 @@ import time
 from PySide6.QtCore import QObject, Property, QThread, QUrl, Signal, Slot
 from PySide6.QtGui import QDesktopServices, QGuiApplication
 
-from .protocol import Cancelled, Client, Pairing
+from ..transfer.protocol import Cancelled, Client, Pairing
+from ..transfer.progress import ProgressEstimate, remaining_text
 
 
 def format_bytes(value: int) -> str:
@@ -30,7 +31,7 @@ class Worker(QThread):
     copied = Signal(str)
     failed = Signal(str)
     cancelled = Signal(str)
-    progressed = Signal(float, str, str)
+    progressed = Signal(float, str, str, float)
 
     def __init__(self, invitation: str, destination: str = "", manifest: dict | None = None, parent=None):
         super().__init__(parent)
@@ -39,6 +40,7 @@ class Worker(QThread):
         self.manifest_data = manifest
         self.stop_event = threading.Event()
         self._last_progress = 0.0
+        self.estimate = ProgressEstimate()
 
     def run(self):
         try:
@@ -47,6 +49,8 @@ class Worker(QThread):
             if self.manifest_data is None:
                 self.inspected.emit(pairing, client.manifest())
             else:
+                self.estimate = ProgressEstimate()
+                self.progress(0, sum(file["size"] for file in self.manifest_data["files"]), "")
                 final = client.download(self.manifest_data, Path(self.destination), self.progress)
                 self.copied.emit(str(final))
         except Cancelled as error:
@@ -62,7 +66,8 @@ class Worker(QThread):
         if completed < total and now - self._last_progress < 0.1:
             return
         self._last_progress = now
-        self.progressed.emit(completed / total if total else 1.0, f"{format_bytes(completed)} / {format_bytes(total)}", current)
+        remaining = self.estimate.remaining(completed, total)
+        self.progressed.emit(completed / total if total else 1.0, f"{format_bytes(completed)} / {format_bytes(total)}", current, remaining if remaining is not None else -1)
 
 
 class Controller(QObject):
@@ -77,13 +82,17 @@ class Controller(QObject):
         self._destination = ""
         self._progress = 0.0
         self._progress_text = ""
+        self._remaining_text = "Estimating…"
         self._current_file = ""
         self._result = ""
         self._invitation = ""
         self._manifest = None
         self._worker = None
         self._busy = False
+        self.external_cancel_requested = False
+        self._external_transfer = False
 
+    externalTransfer = Property(bool, lambda self: self._external_transfer, notify=changed)
     state = Property(str, lambda self: self._state, notify=changed)
     message = Property(str, lambda self: self._message, notify=changed)
     folderName = Property(str, lambda self: self._folder_name, notify=changed)
@@ -91,6 +100,7 @@ class Controller(QObject):
     destination = Property(str, lambda self: self._destination, notify=changed)
     progress = Property(float, lambda self: self._progress, notify=changed)
     progressText = Property(str, lambda self: self._progress_text, notify=changed)
+    remainingText = Property(str, lambda self: self._remaining_text, notify=changed)
     currentFile = Property(str, lambda self: self._current_file, notify=changed)
     busy = Property(bool, lambda self: self._busy, notify=changed)
     paired = Property(bool, lambda self: self._manifest is not None, notify=changed)
@@ -112,6 +122,7 @@ class Controller(QObject):
     def connectMac(self, invitation: str):
         if self._busy:
             return
+        self._external_transfer = False
         self._manifest = None
         self._folder_name = ""
         self._folder_detail = ""
@@ -139,18 +150,20 @@ class Controller(QObject):
 
     @Slot()
     def startCopy(self):
-        if self._busy or self._manifest is None or not self._destination:
+        if self._busy or self._external_transfer or self._manifest is None or not self._destination:
             return
         self._progress = 0.0
         self._progress_text = "Preparing your folder…"
+        self._remaining_text = "Estimating…"
         self._current_file = ""
         self._message = "Keep both devices awake until copying finishes."
         self._state = "copying"
         self.launch(Worker(self._invitation, self._destination, self._manifest, self))
 
-    @Slot(float, str, str)
-    def progressed(self, progress, text, current):
+    @Slot(float, str, str, float)
+    def progressed(self, progress, text, current, remaining=-1):
         self._progress, self._progress_text, self._current_file = progress, text, current
+        self._remaining_text = remaining_text(remaining if remaining >= 0 else None)
         self.changed.emit()
 
     @Slot(str)
@@ -181,15 +194,48 @@ class Controller(QObject):
 
     @Slot()
     def cancel(self):
+        if self._busy and self._worker is None:
+            self.external_cancel_requested = True
+            self._message = "Cancelling…"
+            self.changed.emit()
         if self._worker:
             self._worker.stop_event.set()
             self._message = "Cancelling… a stalled connection may take up to 15 seconds to close."
             self.changed.emit()
 
+    def beginExternalTransfer(self, name, count, total, destination):
+        self._external_transfer = True
+        self._invitation = ""
+        self._manifest = {"name": name, "files": []}
+        self._folder_name = name
+        self._folder_detail = f"{count} files · {format_bytes(total)}"
+        self._destination = destination
+        self._progress = 0.0
+        self._progress_text = f"0 B / {format_bytes(total)}"
+        self._current_file = ""
+        self._remaining_text = "Estimating…"
+        self._result = ""
+        self._state = "copying"
+        self._message = "Mac connected · Transfer started on Mac"
+        self._busy = True
+        self.external_cancel_requested = False
+        self.changed.emit()
+
+    def endExternalTransfer(self, path=None, error=None):
+        self._busy = False
+        if path:
+            self.copied(path)
+        elif self.external_cancel_requested or error is None:
+            self.cancelled("Transfer cancelled on the Deck." if self.external_cancel_requested
+                           else "Mac disconnected · Transfer cancelled")
+        else:
+            self.failed(error)
+
     @Slot()
     def disconnectMac(self):
         if self._busy:
             return
+        self._external_transfer = False
         self._manifest = None
         self._invitation = ""
         self._folder_name = ""

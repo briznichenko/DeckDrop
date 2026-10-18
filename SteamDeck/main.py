@@ -17,8 +17,8 @@ from PySide6.QtNetwork import QLocalSocket
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 
-from deckdrop.controller import Controller
-from deckdrop.pairing import PairingInbox, socket_path
+from deckdrop.presentation.controller import Controller
+from deckdrop.services.pairing import PairingInbox, socket_path
 
 
 def main():
@@ -38,7 +38,7 @@ def main():
     inbox.listen()
     engine = QQmlApplicationEngine()
     engine.setInitialProperties({"backend": controller})
-    engine.load(QUrl.fromLocalFile(str(Path(__file__).parent / "qml/Main.qml")))
+    engine.load(QUrl.fromLocalFile(str(Path(__file__).parent / "deckdrop/presentation/qml/Main.qml")))
     if not engine.rootObjects():
         return 1
     window = engine.rootObjects()[0]

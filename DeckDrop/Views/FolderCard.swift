@@ -6,7 +6,7 @@ struct FolderCard: View {
     @State private var isDropTargeted = false
 
     private var canSelectFolder: Bool {
-        model.transferSession == nil && !model.startingSession
+        model.transferSession == nil && !model.startingSession && !model.quickTransferring
     }
 
     var body: some View {

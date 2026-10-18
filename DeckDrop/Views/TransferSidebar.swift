@@ -15,8 +15,9 @@ struct TransferSidebar: View {
                 SidebarStep("01", "Choose a folder", icon: "folder", active: model.folder != nil)
                 SidebarStep(
                     "02", model.useSMB ? "Enable sharing" : "Pair your Deck", icon: "wifi",
-                    active: model.useSMB ? model.smbListening : model.transferSession != nil)
-                SidebarStep("03", "Copy on Deck", icon: "gamecontroller", active: false)
+                    active: model.useSMB ? model.smbListening
+                        : model.transferSession != nil || !model.completedDestination.isEmpty)
+                SidebarStep("03", "Copy on Deck", icon: "gamecontroller", active: !model.completedDestination.isEmpty)
             }
             .padding(.top, 48)
             Spacer(minLength: 28)

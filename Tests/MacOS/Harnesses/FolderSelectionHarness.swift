@@ -13,7 +13,10 @@ struct FolderSelectionHarness {
         let app = root.appendingPathComponent("Example.app")
         try FileManager.default.createDirectory(at: app, withIntermediateDirectories: true)
 
-        let model = TransferModel()
+        let suite = "DeckDrop.Tests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let model = TransferModel(defaults: defaults)
         precondition(model.selectFolder([root]))
         precondition(model.folder == root)
 
@@ -31,6 +34,20 @@ struct FolderSelectionHarness {
         precondition(!model.selectFolder([FileManager.default.temporaryDirectory]))
         precondition(model.folder == root)
         precondition(model.errorMessage == nil)
-        print("Folder selection: valid folder, invalid drops, and session lock passed.")
+        model.startingSession = false
+        model.quickTransferring = true
+        precondition(!model.selectFolder([FileManager.default.temporaryDirectory]))
+        model.quickTransferring = false
+        model.sshHost = "deck@example"
+        model.deckDestination = "/run/media/deck/card with spaces"
+        precondition(TransferModel(defaults: defaults).deckDestination.isEmpty)
+        model.saveTransferDefaults()
+        let restored = TransferModel(defaults: defaults)
+        precondition(restored.sshHost == model.sshHost)
+        precondition(restored.deckDestination == model.deckDestination)
+        precondition(restored.folder?.path == root.path)
+        precondition(restored.transferSession == nil)
+        precondition(!restored.showTransferConfirmation)
+        print("Folder validation, session locks, and opt-in defaults passed.")
     }
 }
