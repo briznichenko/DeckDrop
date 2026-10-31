@@ -23,7 +23,7 @@ struct FolderSelectionHarness {
         let suite = "DeckDrop.Tests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
         defer { defaults.removePersistentDomain(forName: suite) }
-        let model = TransferModel(defaults: defaults)
+        let model = TransferViewModel(defaults: defaults)
         precondition(model.selectFolder([root]))
         precondition(model.folder == root)
 
@@ -47,9 +47,9 @@ struct FolderSelectionHarness {
         model.quickTransferring = false
         model.sshHost = "deck@example"
         model.deckDestination = "/run/media/deck/card with spaces"
-        precondition(TransferModel(defaults: defaults).deckDestination.isEmpty)
+        precondition(TransferViewModel(defaults: defaults).deckDestination.isEmpty)
         model.saveTransferDefaults()
-        let restored = TransferModel(defaults: defaults)
+        let restored = TransferViewModel(defaults: defaults)
         precondition(restored.sshHost == model.sshHost)
         precondition(restored.deckDestination == model.deckDestination)
         precondition(restored.folder?.path == root.path)

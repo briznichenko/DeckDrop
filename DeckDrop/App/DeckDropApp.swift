@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct DeckDropApp: App {
-    @State private var model = TransferModel()
+    @State private var model = TransferViewModel()
 
     var body: some Scene {
         Window("Deck Drop", id: "main") {

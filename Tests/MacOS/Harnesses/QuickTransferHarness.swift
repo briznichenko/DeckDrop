@@ -15,7 +15,7 @@ struct QuickTransferHarness {
         let suite = "DeckDrop.QuickTransferTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
         defer { defaults.removePersistentDomain(forName: suite) }
-        let model = TransferModel(defaults: defaults)
+        let model = TransferViewModel(defaults: defaults)
         model.sshHost = arguments[2]
         model.deckDestination = arguments[3]
         precondition(model.selectFolder([URL(fileURLWithPath: arguments[1])]))

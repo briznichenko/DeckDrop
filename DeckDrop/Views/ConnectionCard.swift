@@ -9,7 +9,7 @@ import AppKit
 import SwiftUI
 
 struct ConnectionCard: View {
-    @Bindable var model: TransferModel
+    @Bindable var model: TransferViewModel
 
     var body: some View {
         TransferCard {

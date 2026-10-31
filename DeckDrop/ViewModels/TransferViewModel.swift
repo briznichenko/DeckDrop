@@ -1,5 +1,5 @@
 //
-//  TransferModel.swift
+//  TransferViewModel.swift
 //  DeckDrop
 //
 //  Created by Andrii Bryzhnychenko on 10/17/26.
@@ -9,7 +9,7 @@ import AppKit
 import Observation
 
 @MainActor @Observable
-final class TransferModel {
+final class TransferViewModel {
     var folder: URL?
     var addresses: [NetworkAddress] = []
     var selectedAddress = ""

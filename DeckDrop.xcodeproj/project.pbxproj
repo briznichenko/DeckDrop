@@ -12,7 +12,7 @@
 		00000000000000000000000C /* DeckDrop.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000007 /* DeckDrop.icns */; };
 		000000000000000000000101 /* NetworkAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000100 /* NetworkAddress.swift */; };
 		000000000000000000000103 /* SystemSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000102 /* SystemSnapshot.swift */; };
-		000000000000000000000105 /* TransferModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000104 /* TransferModel.swift */; };
+		000000000000000000000105 /* TransferViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000104 /* TransferViewModel.swift */; };
 		000000000000000000000107 /* CardHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000106 /* CardHeading.swift */; };
 		000000000000000000000109 /* InstructionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000108 /* InstructionRow.swift */; };
 		00000000000000000000010B /* SidebarStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000010A /* SidebarStep.swift */; };
@@ -41,7 +41,7 @@
 		00000000000000000000000E /* DeckDrop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeckDrop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		000000000000000000000100 /* NetworkAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAddress.swift; sourceTree = "<group>"; };
 		000000000000000000000102 /* SystemSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemSnapshot.swift; sourceTree = "<group>"; };
-		000000000000000000000104 /* TransferModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferModel.swift; sourceTree = "<group>"; };
+		000000000000000000000104 /* TransferViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferViewModel.swift; sourceTree = "<group>"; };
 		000000000000000000000106 /* CardHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeading.swift; sourceTree = "<group>"; };
 		000000000000000000000108 /* InstructionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionRow.swift; sourceTree = "<group>"; };
 		00000000000000000000010A /* SidebarStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarStep.swift; sourceTree = "<group>"; };
@@ -90,104 +90,6 @@
 			name = "Deck Drop";
 			sourceTree = "<group>";
 		};
-		6D000C72BF4D214F87F0324C /* App */ = {
-			isa = PBXGroup;
-			children = (
-				000000000000000000000005 /* DeckDropApp.swift */,
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		C1F12FF52A3D3B8F66D8C36A /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				000000000000000000000100 /* NetworkAddress.swift */,
-				000000000000000000000102 /* SystemSnapshot.swift */,
-				000000000000000000000300 /* TransferManifest.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		B66656C389365B0A08DC3F4A /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				000000000000000000000007 /* DeckDrop.icns */,
-				000000000000000000000008 /* Info.plist */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		513B833174CB78E7226324A6 /* System */ = {
-			isa = PBXGroup;
-			children = (
-				000000000000000000000006 /* SystemProbe.swift */,
-			);
-			path = System;
-			sourceTree = "<group>";
-		};
-		1C8CB2932114F1AD152AA6AD /* Transfer */ = {
-			isa = PBXGroup;
-			children = (
-				000000000000000000000309 /* SSHPairing.swift */,
-				000000000000000000000302 /* TransferIdentity.swift */,
-				000000000000000000000304 /* TransferServer.swift */,
-			);
-			path = Transfer;
-			sourceTree = "<group>";
-		};
-		11127FC02961B99652D6F2FA /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				513B833174CB78E7226324A6 /* System */,
-				1C8CB2932114F1AD152AA6AD /* Transfer */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		D55944C4A8ECE47D16E4691C /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				000000000000000000000104 /* TransferModel.swift */,
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
-		C8C17A05F0BCD1045D7F8C20 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				000000000000000000000106 /* CardHeading.swift */,
-				000000000000000000000108 /* InstructionRow.swift */,
-				00000000000000000000010A /* SidebarStep.swift */,
-				00000000000000000000010C /* TransferCard.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		243EBA5343FCBCFD58531D01 /* Style */ = {
-			isa = PBXGroup;
-			children = (
-				000000000000000000000116 /* Palette.swift */,
-			);
-			path = Style;
-			sourceTree = "<group>";
-		};
-		1593C8D59DDFA0E2C78C2079 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				C8C17A05F0BCD1045D7F8C20 /* Components */,
-				243EBA5343FCBCFD58531D01 /* Style */,
-				00000000000000000000010E /* ConnectionCard.swift */,
-				000000000000000000000110 /* ContentView.swift */,
-				000000000000000000000112 /* DiagnosticsView.swift */,
-				000000000000000000000114 /* FolderCard.swift */,
-				000000000000000000000306 /* PairingCard.swift */,
-				000000000000000000000118 /* SharingCard.swift */,
-				00000000000000000000011A /* TransferHeader.swift */,
-				00000000000000000000011C /* TransferSidebar.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		000000000000000000000003 /* DeckDrop */ = {
 			isa = PBXGroup;
 			children = (
@@ -207,6 +109,104 @@
 				00000000000000000000000E /* DeckDrop.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		11127FC02961B99652D6F2FA /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				513B833174CB78E7226324A6 /* System */,
+				1C8CB2932114F1AD152AA6AD /* Transfer */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		1593C8D59DDFA0E2C78C2079 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C8C17A05F0BCD1045D7F8C20 /* Components */,
+				243EBA5343FCBCFD58531D01 /* Style */,
+				00000000000000000000010E /* ConnectionCard.swift */,
+				000000000000000000000110 /* ContentView.swift */,
+				000000000000000000000112 /* DiagnosticsView.swift */,
+				000000000000000000000114 /* FolderCard.swift */,
+				000000000000000000000306 /* PairingCard.swift */,
+				000000000000000000000118 /* SharingCard.swift */,
+				00000000000000000000011A /* TransferHeader.swift */,
+				00000000000000000000011C /* TransferSidebar.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1C8CB2932114F1AD152AA6AD /* Transfer */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000309 /* SSHPairing.swift */,
+				000000000000000000000302 /* TransferIdentity.swift */,
+				000000000000000000000304 /* TransferServer.swift */,
+			);
+			path = Transfer;
+			sourceTree = "<group>";
+		};
+		243EBA5343FCBCFD58531D01 /* Style */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000116 /* Palette.swift */,
+			);
+			path = Style;
+			sourceTree = "<group>";
+		};
+		513B833174CB78E7226324A6 /* System */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000006 /* SystemProbe.swift */,
+			);
+			path = System;
+			sourceTree = "<group>";
+		};
+		6D000C72BF4D214F87F0324C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000005 /* DeckDropApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		B66656C389365B0A08DC3F4A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000007 /* DeckDrop.icns */,
+				000000000000000000000008 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C1F12FF52A3D3B8F66D8C36A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000100 /* NetworkAddress.swift */,
+				000000000000000000000102 /* SystemSnapshot.swift */,
+				000000000000000000000300 /* TransferManifest.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C8C17A05F0BCD1045D7F8C20 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000106 /* CardHeading.swift */,
+				000000000000000000000108 /* InstructionRow.swift */,
+				00000000000000000000010A /* SidebarStep.swift */,
+				00000000000000000000010C /* TransferCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		D55944C4A8ECE47D16E4691C /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000104 /* TransferViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -246,7 +246,7 @@
 				en,
 				Base,
 			);
-			mainGroup = 000000000000000000000002;
+			mainGroup = 000000000000000000000002 /* Deck Drop */;
 			productRefGroup = 000000000000000000000004 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -281,7 +281,7 @@
 				00000000000000000000000B /* SystemProbe.swift in Sources */,
 				000000000000000000000101 /* NetworkAddress.swift in Sources */,
 				000000000000000000000103 /* SystemSnapshot.swift in Sources */,
-				000000000000000000000105 /* TransferModel.swift in Sources */,
+				000000000000000000000105 /* TransferViewModel.swift in Sources */,
 				000000000000000000000107 /* CardHeading.swift in Sources */,
 				000000000000000000000109 /* InstructionRow.swift in Sources */,
 				00000000000000000000010B /* SidebarStep.swift in Sources */,

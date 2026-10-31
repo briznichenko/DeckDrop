@@ -17,7 +17,7 @@ DeckDrop/
 │   │   ├── SystemSnapshot.swift
 │   │   └── TransferManifest.swift      Manifest, file, session, and error values
 │   ├── ViewModels/
-│   │   └── TransferModel.swift         UI state and workflow orchestration
+│   │   └── TransferViewModel.swift         UI state and workflow orchestration
 │   ├── Views/
 │   │   ├── ContentView.swift           Main screen and confirmation
 │   │   ├── ConnectionCard.swift
@@ -99,9 +99,9 @@ The ignored root `AGENTS.md` symlink points to `.local/ai/AGENTS.md` for local i
 
 ## Mac responsibilities
 
-`DeckDropApp` owns `TransferModel` through SwiftUI `@State`. Views observe it and use `@Bindable` where controls need bindings. View-only state, such as the confirmation's save-defaults checkbox, stays in the view.
+`DeckDropApp` owns `TransferViewModel` through SwiftUI `@State`. Views observe it and use `@Bindable` where controls need bindings. View-only state, such as the confirmation's save-defaults checkbox, stays in the view.
 
-`TransferModel` is the ViewModel despite its name. It is `@MainActor @Observable`: UI state and user actions belong to the main actor. It coordinates services and owns the current workflow's tasks. UserDefaults stores opted-in host, destination, and source-path defaults. Invitation secrets remain in memory.
+`TransferViewModel` is `@MainActor @Observable`: UI state and user actions belong to the main actor. It coordinates services and owns the current workflow's tasks. UserDefaults stores opted-in host, destination, and source-path defaults. Invitation secrets remain in memory.
 
 Services perform system and transfer work. `SystemProbe`, `TransferServer`, and `SSHPairing` are actors. Actor isolation protects their mutable state, while async calls let the UI wait without doing the operation synchronously on the main actor. Cancellation and session-generation checks prevent stale work from updating a newer session.
 

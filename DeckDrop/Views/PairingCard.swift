@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PairingCard: View {
-    @Bindable var model: TransferModel
+    @Bindable var model: TransferViewModel
 
     var body: some View {
         TransferCard {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Bindable var model: TransferModel
+    @Bindable var model: TransferViewModel
     @Environment(\.scenePhase) private var phase
     @State private var saveAsDefault = false
 

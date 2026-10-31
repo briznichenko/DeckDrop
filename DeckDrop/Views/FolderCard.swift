@@ -9,7 +9,7 @@ import AppKit
 import SwiftUI
 
 struct FolderCard: View {
-    @Bindable var model: TransferModel
+    @Bindable var model: TransferViewModel
     @State private var isDropTargeted = false
 
     private var canSelectFolder: Bool {

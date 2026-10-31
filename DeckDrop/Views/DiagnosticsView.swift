@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DiagnosticsView: View {
-    @Bindable var model: TransferModel
+    @Bindable var model: TransferViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
