@@ -119,8 +119,12 @@ final class TransferViewModel {
         transferMessage = progress.fraction >= 1 ? "Finishing…" : "Transferring…"
     }
 
+    private var currentAddress: NetworkAddress? {
+        addresses.first(where: { $0.id == selectedAddress }) ?? addresses.first
+    }
+
     var pairingLink: String {
-        guard let host = addresses.first(where: { $0.id == selectedAddress })?.host ?? addresses.first?.host,
+        guard let host = currentAddress?.host,
             let transferSession
         else { return "" }
         return transferSession.pairingLink(host: host)
@@ -190,13 +194,12 @@ final class TransferViewModel {
 
     func copyPairingLink() {
         guard !pairingLink.isEmpty else { return }
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(pairingLink, forType: .string)
+        copyToClipboard(pairingLink)
         copied = true
     }
 
     var connectionAddress: String {
-        addresses.first(where: { $0.id == selectedAddress })?.smbURL ?? addresses.first?.smbURL ?? ""
+        currentAddress?.smbURL ?? ""
     }
 
     func refresh() async {
@@ -267,14 +270,17 @@ final class TransferViewModel {
 
     func copyAddress() {
         guard !connectionAddress.isEmpty else { return }
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(connectionAddress, forType: .string)
+        copyToClipboard(connectionAddress)
         copied = true
     }
 
     func copyPath() {
         guard let folder else { return }
+        copyToClipboard(folder.path)
+    }
+
+    private func copyToClipboard(_ text: String) {
         NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(folder.path, forType: .string)
+        NSPasteboard.general.setString(text, forType: .string)
     }
 }
