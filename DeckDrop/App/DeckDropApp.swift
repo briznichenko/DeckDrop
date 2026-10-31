@@ -14,7 +14,6 @@ struct DeckDropApp: App {
     var body: some Scene {
         Window("Deck Drop", id: "main") {
             ContentView(model: model)
-                .preferredColorScheme(.dark)
                 .frame(minWidth: 900, minHeight: 660)
         }
         .defaultSize(width: 1000, height: 700)
