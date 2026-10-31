@@ -203,6 +203,14 @@ class Controller(QObject):
             self._message = "Cancelling… a stalled connection may take up to 15 seconds to close."
             self.changed.emit()
 
+    def externalProgress(self, completed: int, total: int, current: str, remaining: float | None) -> None:
+        self.progressed(
+            completed / total if total else 1.0,
+            f"{format_bytes(completed)} / {format_bytes(total)}",
+            current,
+            remaining if remaining is not None else -1,
+        )
+
     def beginExternalTransfer(self, name, count, total, destination):
         self._external_transfer = True
         self._invitation = ""

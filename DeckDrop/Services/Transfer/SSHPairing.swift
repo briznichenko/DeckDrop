@@ -14,17 +14,6 @@ actor SSHPairing {
         let currentFile: String
         var remainingSeconds: Double? = nil
 
-        var remainingText: String {
-            guard let remainingSeconds, remainingSeconds.isFinite, remainingSeconds >= 0 else {
-                return "Estimating…"
-            }
-            let seconds = max(1, Int(min(remainingSeconds.rounded(.up), 31_536_000)))
-            if seconds < 60 { return "About \(seconds)s left" }
-            let minutes = (seconds + 59) / 60
-            if minutes < 60 { return "About \(minutes)m left" }
-            return "About \(minutes / 60)h \(minutes % 60)m left"
-        }
-
         var fraction: Double {
             totalBytes > 0 ? min(1, Double(completedBytes) / Double(totalBytes)) : 1
         }

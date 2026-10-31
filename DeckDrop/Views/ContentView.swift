@@ -100,7 +100,7 @@ struct ContentView: View {
                     }
                     .foregroundStyle(Palette.muted)
                     if model.quickTransferring {
-                        Text(progress.fraction >= 1 ? "Finishing…" : progress.remainingText)
+                        Text(progress.fraction >= 1 ? "Finishing…" : remainingText(progress.remainingSeconds))
                             .foregroundStyle(Palette.muted)
                     }
                 }
@@ -166,5 +166,16 @@ struct ContentView: View {
         .padding(28)
         .frame(width: 520)
         .onAppear { saveAsDefault = false }
+    }
+
+    private func remainingText(_ remainingSeconds: Double?) -> String {
+        guard let remainingSeconds, remainingSeconds.isFinite, remainingSeconds >= 0 else {
+            return "Estimating…"
+        }
+        let seconds = max(1, Int(min(remainingSeconds.rounded(.up), 31_536_000)))
+        if seconds < 60 { return "About \(seconds)s left" }
+        let minutes = (seconds + 59) / 60
+        if minutes < 60 { return "About \(minutes)m left" }
+        return "About \(minutes / 60)h \(minutes % 60)m left"
     }
 }

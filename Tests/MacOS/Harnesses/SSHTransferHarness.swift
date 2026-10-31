@@ -19,7 +19,7 @@ struct SSHTransferHarness {
         let destination = "/run/media/deck/card with spaces"
         let estimate = try JSONDecoder().decode(SSHPairing.Progress.self, from: Data(
             #"{"completedBytes":25,"totalBytes":100,"currentFile":"save.bin","remainingSeconds":61}"#.utf8))
-        precondition(estimate.remainingText == "About 2m left")
+        precondition(estimate.remainingSeconds == 61)
         let replies = [
             "{\"paired\":true,\"completed\":true,\"path\":\"/tmp/completed\"}",
             "{\"paired\":true}",

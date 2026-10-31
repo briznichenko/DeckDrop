@@ -113,7 +113,7 @@ The current ViewModel also owns AppKit folder-picker, clipboard, and Finder acti
 
 `main.py` creates the Qt application, single-instance lock, controller, pairing inbox, and QML engine. `pair.py` remains at the receiver root because the Mac invokes `~/Applications/DeckDrop/pair.py` through SSH. It coordinates automatic copying and receiver status messages.
 
-QML renders controller properties and invokes slots. `Controller` maintains presentation state; its `Worker` runs blocking client operations in a QThread. Qt signals carry results and progress back to the UI thread. The local pairing service receives requests and forwards them to the controller. It also reuses the controller's byte formatter, so this existing service has a presentation dependency; the folders do not enforce strict layer isolation.
+QML renders controller properties and invokes slots. `Controller` maintains presentation state; its `Worker` runs blocking client operations in a QThread. Qt signals carry results and progress back to the UI thread. The local pairing service validates requests and forwards numeric progress and transfer events to the controller. The controller formats these values for display. The inbox still depends on the controller’s state and action methods through the instance supplied by the entry point; the folders do not enforce strict layer isolation.
 
 The transfer package contains the reusable HTTPS client, validation, download behavior, and time estimation. It has no Qt dependency, so protocol and progress checks can run without a graphical environment.
 

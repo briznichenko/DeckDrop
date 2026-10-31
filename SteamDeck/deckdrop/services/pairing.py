@@ -131,10 +131,7 @@ class PairingInbox(QObject):
                 raise ValueError
             if remaining is not None and (not isinstance(remaining, (int, float)) or not math.isfinite(remaining) or remaining < 0):
                 raise ValueError
-            from ..presentation.controller import format_bytes
-            self.controller.progressed(completed / total if total else 1.0,
-                                       f"{format_bytes(completed)} / {format_bytes(total)}", current,
-                                       remaining if remaining is not None else -1)
+            self.controller.externalProgress(completed, total, current, remaining)
         elif event in ("complete", "error"):
             path, error = request.get("path"), request.get("error")
             if event == "complete" and (not isinstance(path, str) or not path.startswith("/")):
