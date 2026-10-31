@@ -14,7 +14,7 @@ os.environ.setdefault("QT_QUICK_CONTROLS_STYLE", "Basic")
 
 from PySide6.QtCore import QCoreApplication, QEvent, QLockFile, QUrl
 from PySide6.QtNetwork import QLocalSocket
-from PySide6.QtGui import QGuiApplication
+from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 
 from deckdrop.presentation.controller import Controller
@@ -25,6 +25,7 @@ def main():
     app = QGuiApplication(sys.argv)
     app.setApplicationName("Deck Drop")
     app.setOrganizationName("DeckDrop")
+    app.setWindowIcon(QIcon(str(Path(__file__).parent / "deckdrop/presentation/DeckDrop.png")))
     lock = QLockFile(socket_path() + ".lock")
     if not lock.tryLock(0):
         existing = QLocalSocket()

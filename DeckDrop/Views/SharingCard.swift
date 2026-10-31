@@ -17,7 +17,7 @@ struct SharingCard: View {
                 Spacer()
                 HStack(spacing: 6) {
                     Circle()
-                        .fill(model.smbListening ? Palette.mint : Color.orange)
+                        .fill(model.smbListening ? Palette.accent : Palette.muted)
                         .frame(width: 6, height: 6)
                     Text(
                         !model.checked
@@ -37,18 +37,13 @@ struct SharingCard: View {
             }
             HStack {
                 Button("Open Sharing Settings", systemImage: "gearshape") { model.openSettings() }
-                    .buttonStyle(.plain)
-                    .font(Palette.text)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
-                    .foregroundStyle(Palette.background)
-                    .background(Palette.mint, in: Rectangle())
+                    .buttonStyle(TerminalButtonStyle(primary: true))
                 Button {
                     Task { await model.refresh() }
                 } label: {
                     Label(model.checking ? "Checking…" : "Refresh", systemImage: "arrow.clockwise")
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(TerminalButtonStyle())
                 .disabled(model.checking)
                 Spacer()
             }

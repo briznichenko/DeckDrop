@@ -217,8 +217,12 @@ final class TransferViewModel {
         checked = true
     }
 
+    var canSelectFolder: Bool {
+        transferSession == nil && !startingSession && !quickTransferring
+    }
+
     func chooseFolder() {
-        guard transferSession == nil, !startingSession, !quickTransferring else { return }
+        guard canSelectFolder else { return }
         let picker = NSOpenPanel()
         picker.canChooseFiles = false
         picker.canChooseDirectories = true
@@ -232,7 +236,7 @@ final class TransferViewModel {
 
     @discardableResult
     func selectFolder(_ urls: [URL]) -> Bool {
-        guard transferSession == nil, !startingSession, !quickTransferring else { return false }
+        guard canSelectFolder else { return false }
         guard urls.count == 1, let url = urls.first, url.isFileURL else {
             errorMessage = "Choose one local folder."
             return false

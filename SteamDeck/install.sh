@@ -30,7 +30,8 @@ launcher.write_text(
     "[Desktop Entry]\nType=Application\nName=Deck Drop\n"
     "Comment=Receive folders from your Mac over your local network\n"
     f"Exec={quote(root / '.venv/bin/python')} {quote(root / 'main.py')}\n"
-    "Icon=folder-download\nTerminal=false\nCategories=Network;FileTransfer;\n"
+    f"Icon={root / 'deckdrop/presentation/DeckDrop.png'}\n"
+    "Terminal=false\nCategories=Network;FileTransfer;\n"
     "StartupNotify=true\n", encoding="utf-8"
 )
 print(f"Installed launcher: {launcher}")

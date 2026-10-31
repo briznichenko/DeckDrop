@@ -22,7 +22,7 @@ struct CardHeading: View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             Text(number)
                 .monospacedDigit()
-                .foregroundStyle(Palette.mint)
+                .foregroundStyle(Palette.accent)
             VStack(alignment: .leading, spacing: 8) {
                 Text(title)
                     .fontWeight(.semibold)

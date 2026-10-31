@@ -16,6 +16,7 @@ Rectangle {
     property string caption: ""
     implicitHeight: inner.implicitHeight + Theme.panelPadding * 2
     color: Theme.panel
+    border.color: Theme.divider
     ColumnLayout {
         id: inner
         anchors { left: parent.left; right: parent.right; top: parent.top; margins: Theme.panelPadding }
@@ -26,6 +27,7 @@ Rectangle {
             Text {
                 text: panel.number
                 color: Theme.accent
+                font.family: Theme.fontFamily
                 font.pixelSize: Theme.textSize
                 Layout.alignment: Qt.AlignTop
             }
@@ -36,7 +38,7 @@ Rectangle {
                     Layout.fillWidth: true
                     text: panel.heading
                     color: Theme.text
-                    font { pixelSize: Theme.textSize; weight: Font.DemiBold }
+                    font { family: Theme.fontFamily; pixelSize: Theme.textSize; weight: Font.DemiBold }
                     wrapMode: Text.Wrap
                 }
                 Text {
@@ -44,6 +46,7 @@ Rectangle {
                     visible: panel.caption.length > 0
                     text: panel.caption
                     color: Theme.muted
+                    font.family: Theme.fontFamily
                     font.pixelSize: Theme.textSize
                     wrapMode: Text.Wrap
                 }

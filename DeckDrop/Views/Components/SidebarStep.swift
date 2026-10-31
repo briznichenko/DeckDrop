@@ -10,21 +10,19 @@ import SwiftUI
 struct SidebarStep: View {
     let number: String
     let title: String
-    let icon: String
     let active: Bool
 
-    init(_ number: String, _ title: String, icon: String, active: Bool) {
+    init(_ number: String, _ title: String, active: Bool) {
         self.number = number
         self.title = title
-        self.icon = icon
         self.active = active
     }
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: active ? "checkmark.circle.fill" : icon)
-                .foregroundStyle(active ? Palette.mint : Palette.muted)
-                .frame(width: 20)
+            Text(active ? "[x]" : "[ ]")
+                .foregroundStyle(active ? Palette.accent : Palette.muted)
+                .frame(width: 28)
             VStack(alignment: .leading, spacing: 4) {
                 Text(number)
                     .monospacedDigit()

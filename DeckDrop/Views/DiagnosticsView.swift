@@ -42,7 +42,10 @@ struct DiagnosticsView: View {
             }
         }
             .font(Palette.text)
+            .foregroundStyle(Palette.accent)
+            .buttonStyle(TerminalButtonStyle())
             .padding(28)
+            .background(Palette.background)
             .frame(width: 580)
     }
 }

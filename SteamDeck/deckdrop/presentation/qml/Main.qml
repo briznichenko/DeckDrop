@@ -21,6 +21,7 @@ ApplicationWindow {
     visible: true
     title: "Deck Drop"
     color: Theme.background
+    font.family: Theme.fontFamily
     font.pixelSize: Theme.textSize
     onClosing: function(close) {
         if (backend.busy) {
@@ -49,14 +50,15 @@ ApplicationWindow {
                 anchors { leftMargin: 24; rightMargin: 24; topMargin: 36; bottomMargin: 28 }
                 spacing: 0
                 Text {
-                    text: "⇄  Deck Drop"
+                    text: "> Deck Drop"
                     color: Theme.accent
-                    font { pixelSize: Theme.textSize; weight: Font.DemiBold }
+                    font { family: Theme.fontFamily; pixelSize: Theme.textSize; weight: Font.DemiBold }
                 }
                 Text {
                     Layout.topMargin: 12
                     text: "Mac → Steam Deck"
                     color: Theme.muted
+                    font.family: Theme.fontFamily
                     font.pixelSize: Theme.textSize
                 }
                 ColumnLayout {
@@ -68,7 +70,7 @@ ApplicationWindow {
                     StepLabel { number: "03"; title: "Copy on Deck"; done: backend.state === "complete" }
                 }
                 Item { Layout.fillHeight: true; Layout.minimumHeight: 28 }
-                Text { text: "Encrypted connection"; color: Theme.muted; font.pixelSize: Theme.textSize }
+                Text { text: "Encrypted connection"; color: Theme.muted; font.family: Theme.fontFamily; font.pixelSize: Theme.textSize }
             }
         }
         ScrollView {
@@ -86,9 +88,9 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     Layout.leftMargin: Theme.pagePadding
                     Layout.rightMargin: Theme.pagePadding
-                    Text { text: "Folder transfer"; color: Theme.text; font { pixelSize: Theme.textSize; weight: Font.DemiBold } }
+                    Text { text: "Folder transfer"; color: Theme.text; font { family: Theme.fontFamily; pixelSize: Theme.textSize; weight: Font.DemiBold } }
                     Item { Layout.fillWidth: true }
-                    Text { text: "Local connection"; color: Theme.muted; font.pixelSize: Theme.textSize }
+                    Text { text: "Local connection"; color: Theme.muted; font.family: Theme.fontFamily; font.pixelSize: Theme.textSize }
                 }
                 Panel {
                     Layout.fillWidth: true
@@ -108,6 +110,7 @@ ApplicationWindow {
                             placeholderText: "Pairing link from Mac"
                             color: Theme.text
                             placeholderTextColor: Theme.muted
+                            font.family: Theme.fontFamily
                             font.pixelSize: Theme.textSize
                             leftPadding: 12
                             rightPadding: 12
@@ -115,7 +118,7 @@ ApplicationWindow {
                             enabled: !backend.busy
                             activeFocusOnTab: true
                             background: Rectangle {
-                                radius: 8
+                                radius: 0
                                 color: Theme.background
                                 border.color: pairingInput.activeFocus ? Theme.accent : Theme.fieldBorder
                                 border.width: pairingInput.activeFocus ? 2 : 1
@@ -143,7 +146,7 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         visible: backend.paired
                         spacing: 16
-                        Text { text: "✓"; color: Theme.accent; font.pixelSize: Theme.textSize }
+                        Text { text: "✓"; color: Theme.accent; font.family: Theme.fontFamily; font.pixelSize: Theme.textSize }
                         ColumnLayout {
                             Layout.fillWidth: true
                             spacing: 8
@@ -152,10 +155,10 @@ ApplicationWindow {
                                 text: backend.folderName
                                 textFormat: Text.PlainText
                                 color: Theme.text
-                                font { pixelSize: Theme.textSize; weight: Font.Medium }
+                                font { family: Theme.fontFamily; pixelSize: Theme.textSize; weight: Font.Medium }
                                 elide: Text.ElideMiddle
                             }
-                            Text { text: backend.folderDetail; color: Theme.muted; font.pixelSize: Theme.textSize }
+                            Text { text: backend.folderDetail; color: Theme.muted; font.family: Theme.fontFamily; font.pixelSize: Theme.textSize }
                         }
                         ActionButton { text: "Disconnect"; enabled: !backend.busy; onClicked: backend.disconnectMac() }
                     }
@@ -174,6 +177,7 @@ ApplicationWindow {
                             text: backend.destination || "No folder selected"
                             textFormat: Text.PlainText
                             color: backend.destination ? Theme.text : Theme.muted
+                            font.family: Theme.fontFamily
                             font.pixelSize: Theme.textSize
                             elide: Text.ElideMiddle
                         }
@@ -208,16 +212,18 @@ ApplicationWindow {
                         }
                         RowLayout {
                             Layout.fillWidth: true
+                            spacing: Theme.contentSpacing
                             Text {
                                 Layout.fillWidth: true
                                 text: backend.currentFile === "Done" ? "" : backend.currentFile
                                 textFormat: Text.PlainText
                                 color: Theme.muted
+                                font.family: Theme.fontFamily
                                 font.pixelSize: Theme.textSize
                                 elide: Text.ElideMiddle
                             }
-                            Text { text: Math.round(backend.progress * 100) + "%"; color: Theme.muted; font.pixelSize: Theme.textSize }
-                            Text { text: backend.progressText; color: Theme.muted; font.pixelSize: Theme.textSize }
+                            Text { text: Math.round(backend.progress * 100) + "%"; color: Theme.muted; font.family: Theme.fontFamily; font.pixelSize: Theme.textSize }
+                            Text { text: backend.progressText; color: Theme.muted; font.family: Theme.fontFamily; font.pixelSize: Theme.textSize }
                         }
                     }
                     Text {
@@ -225,6 +231,7 @@ ApplicationWindow {
                         visible: backend.state === "copying"
                         text: backend.progress >= 1 ? "Finishing…" : backend.remainingText
                         color: Theme.muted
+                        font.family: Theme.fontFamily
                         font.pixelSize: Theme.textSize
                     }
                     Text {
@@ -236,6 +243,7 @@ ApplicationWindow {
                             : backend.state === "copying" ? (backend.progress >= 1 ? "Finishing…" : "Copying…") : backend.message
                         textFormat: Text.PlainText
                         color: backend.state === "error" ? Theme.error : (backend.state === "complete" ? Theme.accent : Theme.muted)
+                        font.family: Theme.fontFamily
                         font.pixelSize: Theme.textSize
                         wrapMode: Text.Wrap
                     }
@@ -262,6 +270,7 @@ ApplicationWindow {
                     Layout.bottomMargin: Theme.pagePadding
                     text: "Same network · Keep both devices awake."
                     color: Theme.muted
+                    font.family: Theme.fontFamily
                     font.pixelSize: Theme.textSize
                     wrapMode: Text.Wrap
                 }

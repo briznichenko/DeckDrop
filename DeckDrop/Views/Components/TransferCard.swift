@@ -18,5 +18,9 @@ struct TransferCard<Content: View>: View {
                 Rectangle()
                     .fill(Palette.card)
             }
+            .overlay {
+                Rectangle().strokeBorder(Palette.border)
+                    .allowsHitTesting(false)
+            }
     }
 }

@@ -20,15 +20,16 @@ Button {
     contentItem: Text {
         text: control.text
         color: control.primary ? Theme.background : Theme.text
+        font.family: Theme.fontFamily
         font.pixelSize: Theme.textSize
         font.weight: Font.Medium
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
     background: Rectangle {
-        radius: height / 2
-        color: control.primary ? Theme.accent : (control.hovered || control.down ? Theme.buttonHover : Theme.button)
-        border.width: control.activeFocus ? 2 : 0
-        border.color: Theme.accent
+        radius: 0
+        color: control.primary ? (control.down ? Theme.muted : Theme.accent) : (control.hovered || control.down ? Theme.buttonHover : Theme.button)
+        border.width: control.activeFocus ? 2 : 1
+        border.color: control.activeFocus || control.hovered ? Theme.accent : Theme.muted
     }
 }

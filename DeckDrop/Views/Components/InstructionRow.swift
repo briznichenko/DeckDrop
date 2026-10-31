@@ -19,7 +19,7 @@ struct InstructionRow: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             Text(number)
-                .foregroundStyle(Palette.mint)
+                .foregroundStyle(Palette.accent)
                 .frame(width: 16)
             Text(text)
                 .fixedSize(horizontal: false, vertical: true)

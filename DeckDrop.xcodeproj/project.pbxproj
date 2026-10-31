@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A10000000000000000000001 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000002 /* MenuBarController.swift */; };
 		00000000000000000000000A /* DeckDropApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000005 /* DeckDropApp.swift */; };
 		00000000000000000000000B /* SystemProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000006 /* SystemProbe.swift */; };
 		00000000000000000000000C /* DeckDrop.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000007 /* DeckDrop.icns */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A10000000000000000000002 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		000000000000000000000005 /* DeckDropApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDropApp.swift; sourceTree = "<group>"; };
 		000000000000000000000006 /* SystemProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemProbe.swift; sourceTree = "<group>"; };
 		000000000000000000000007 /* DeckDrop.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DeckDrop.icns; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				000000000000000000000005 /* DeckDropApp.swift */,
+				A10000000000000000000002 /* MenuBarController.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 				000000000000000000000303 /* TransferIdentity.swift in Sources */,
 				000000000000000000000301 /* TransferManifest.swift in Sources */,
 				00000000000000000000000A /* DeckDropApp.swift in Sources */,
+				A10000000000000000000001 /* MenuBarController.swift in Sources */,
 				00000000000000000000000B /* SystemProbe.swift in Sources */,
 				000000000000000000000101 /* NetworkAddress.swift in Sources */,
 				000000000000000000000103 /* SystemSnapshot.swift in Sources */,

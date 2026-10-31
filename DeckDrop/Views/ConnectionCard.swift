@@ -26,7 +26,7 @@ struct ConnectionCard: View {
             }
             HStack(spacing: 12) {
                 Image(systemName: "network")
-                    .foregroundStyle(Palette.mint)
+                    .foregroundStyle(Palette.accent)
                 Text(
                     model.connectionAddress.isEmpty ? "No local IPv4 address found" : model.connectionAddress
                 )
@@ -42,7 +42,7 @@ struct ConnectionCard: View {
                         systemImage: model.copied ? "checkmark" : "doc.on.doc"
                     )
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(TerminalButtonStyle())
                 .disabled(model.connectionAddress.isEmpty)
             }
             .padding(16)
@@ -61,7 +61,7 @@ struct ConnectionCard: View {
                     .font(Palette.text)
                     .foregroundStyle(Palette.muted)
                 Spacer()
-                Button("Details") { model.showDiagnostics = true }.buttonStyle(.borderless)
+                Button("Details") { model.showDiagnostics = true }.buttonStyle(TerminalButtonStyle())
                     .font(Palette.text)
             }
         }

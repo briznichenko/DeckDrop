@@ -36,7 +36,9 @@ struct ContentView: View {
         .font(Palette.text)
         .foregroundStyle(.white)
         .background(Palette.background)
-        .tint(Palette.mint)
+        .tint(Palette.accent)
+        .buttonStyle(TerminalButtonStyle())
+        .preferredColorScheme(.dark)
         .controlSize(.large)
         .task { await model.refresh() }
         .onChange(of: phase) { _, value in
@@ -83,7 +85,7 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     GeometryReader { geometry in
                         Rectangle().fill(Palette.background)
-                        Rectangle().fill(Palette.mint)
+                        Rectangle().fill(Palette.accent)
                             .frame(width: geometry.size.width * progress.fraction)
                     }
                     .frame(height: 6)
@@ -116,7 +118,7 @@ struct ContentView: View {
                 }
             } else if !model.transferMessage.isEmpty {
                 Label(model.transferMessage, systemImage: model.completedDestination.isEmpty ? "info.circle" : "checkmark.circle.fill")
-                    .foregroundStyle(Palette.mint)
+                    .foregroundStyle(Palette.accent)
                 if !model.completedDestination.isEmpty {
                     Text(model.completedDestination)
                         .foregroundStyle(Palette.muted)
@@ -137,13 +139,20 @@ struct ContentView: View {
                 GridRow {
                     Text("Deck host")
                     TextField("steamdeck", text: $model.sshHost)
+                        .textFieldStyle(.plain)
+                        .padding(10)
+                        .background(Palette.background)
+                        .border(Palette.border)
                 }
                 GridRow {
                     Text("Destination")
                     TextField("/run/media/deck/your-card", text: $model.deckDestination)
+                        .textFieldStyle(.plain)
+                        .padding(10)
+                        .background(Palette.background)
+                        .border(Palette.border)
                 }
             }
-            .textFieldStyle(.roundedBorder)
             Toggle("Save as default", isOn: $saveAsDefault)
                 .toggleStyle(.checkbox)
             Text("Existing folders are kept. Copies get a numbered name.")
@@ -157,13 +166,16 @@ struct ContentView: View {
                     model.transferFolder()
                 }
                 .keyboardShortcut(.defaultAction)
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(TerminalButtonStyle(primary: true))
                 .disabled(model.sshHost.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                     || model.deckDestination.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
         }
         .font(Palette.text)
+        .foregroundStyle(Palette.accent)
+        .buttonStyle(TerminalButtonStyle())
         .padding(28)
+        .background(Palette.background)
         .frame(width: 520)
         .onAppear { saveAsDefault = false }
     }

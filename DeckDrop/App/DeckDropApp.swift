@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct DeckDropApp: App {
-    @State private var model = TransferViewModel()
+    @NSApplicationDelegateAdaptor(DeckDropAppDelegate.self) private var delegate
 
     var body: some Scene {
         Window("Deck Drop", id: "main") {
-            ContentView(model: model)
+            MainWindowContent(delegate: delegate)
                 .frame(minWidth: 900, minHeight: 660)
         }
         .defaultSize(width: 1000, height: 700)
@@ -21,5 +21,35 @@ struct DeckDropApp: App {
         .commands {
             CommandGroup(replacing: .newItem) {}
         }
+    }
+}
+
+private struct MainWindowContent: View {
+    let delegate: DeckDropAppDelegate
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+        ContentView(model: delegate.model)
+            .onAppear {
+                delegate.installMenuBar {
+                    openWindow(id: "main")
+                    NSApp.activate(ignoringOtherApps: true)
+                }
+            }
+    }
+}
+
+@MainActor
+final class DeckDropAppDelegate: NSObject, NSApplicationDelegate {
+    let model = TransferViewModel()
+    private var menuBar: MenuBarController?
+
+    func installMenuBar(openWindow: @escaping () -> Void) {
+        guard menuBar == nil else { return }
+        menuBar = MenuBarController(model: model, openWindow: openWindow)
+    }
+
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        false
     }
 }

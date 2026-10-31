@@ -19,7 +19,7 @@ struct PairingCard: View {
             } else if let session = model.transferSession {
                 Label("Ready for your Deck", systemImage: "lock.shield")
                     .font(Palette.text)
-                    .foregroundStyle(Palette.mint)
+                    .foregroundStyle(Palette.accent)
                 Text(
                     "\(session.manifest.files.count) files · \(ByteCountFormatter.string(fromByteCount: session.manifest.totalBytes, countStyle: .file))"
                 )
@@ -37,18 +37,21 @@ struct PairingCard: View {
                 .fixedSize(horizontal: false, vertical: true)
                 HStack(spacing: 12) {
                     TextField("Deck SSH host", text: $model.sshHost)
-                        .textFieldStyle(.roundedBorder)
+                        .textFieldStyle(.plain)
+                        .padding(10)
+                        .background(Palette.background)
+                        .border(Palette.border)
                         .disabled(model.pairing)
                     Button(model.pairing ? "Pairing…" : "Pair automatically", systemImage: "bolt.horizontal") {
                         model.pairAutomatically()
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(TerminalButtonStyle(primary: true))
                     .disabled(model.pairing || model.sshHost.isEmpty)
                 }
                 if !model.pairingMessage.isEmpty {
                     Text(model.pairingMessage)
                         .font(Palette.text)
-                        .foregroundStyle(Palette.mint)
+                        .foregroundStyle(Palette.accent)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 HStack(spacing: 12) {
@@ -58,10 +61,10 @@ struct PairingCard: View {
                     ) {
                         model.copyPairingLink()
                     }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(TerminalButtonStyle())
                     .disabled(model.pairingLink.isEmpty)
                     Button("Stop sharing", role: .destructive) { model.stopSharing() }
-                        .buttonStyle(.bordered)
+                        .buttonStyle(TerminalButtonStyle())
                 }
                 Text(
                     "Anyone with the link can download this folder. Stop sharing to revoke access."
@@ -72,7 +75,7 @@ struct PairingCard: View {
                 if model.pairingLink.isEmpty {
                     Text("No local address. Connect to Wi-Fi or Ethernet.")
                         .font(Palette.text)
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(Palette.accent)
                 }
             } else {
                 Text(model.deckDestination.isEmpty ? "Choose a destination when you transfer." : "\(model.sshHost) · \(model.deckDestination)")
@@ -81,7 +84,7 @@ struct PairingCard: View {
                 Button("Transfer…", systemImage: "arrow.right") {
                     model.showTransferConfirmation = true
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(TerminalButtonStyle(primary: true))
                 .disabled(model.folder == nil || model.startingSession)
                 DisclosureGroup("Manual sharing") {
                     Button("Start sharing") { model.startSharing() }

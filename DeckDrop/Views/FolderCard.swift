@@ -10,18 +10,13 @@ import SwiftUI
 
 struct FolderCard: View {
     @Bindable var model: TransferViewModel
-    @State private var isDropTargeted = false
-
-    private var canSelectFolder: Bool {
-        model.transferSession == nil && !model.startingSession && !model.quickTransferring
-    }
 
     var body: some View {
         TransferCard {
             CardHeading("01", "Choose a folder")
             HStack(spacing: 16) {
                 Image(systemName: "folder.fill")
-                    .foregroundStyle(Palette.mint)
+                    .foregroundStyle(Palette.accent)
                 VStack(alignment: .leading, spacing: 8) {
                     Text(model.folder?.lastPathComponent ?? "Drop a folder here")
                         .fontWeight(.medium)
@@ -35,9 +30,10 @@ struct FolderCard: View {
                 }
                 Spacer(minLength: 0)
                 Button(model.folder == nil ? "Choose folder…" : "Change…") { model.chooseFolder() }
-                    .buttonStyle(.bordered)
-                    .disabled(!canSelectFolder)
+                    .buttonStyle(TerminalButtonStyle())
+                    .disabled(!model.canSelectFolder)
             }
+            FolderDropArea(model: model)
             if let folder = model.folder {
                 HStack(spacing: 20) {
                     Button("Show in Finder") {
@@ -45,22 +41,45 @@ struct FolderCard: View {
                     }
                     Button("Copy path") { model.copyPath() }
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(TerminalButtonStyle())
             }
         }
-        .contentShape(Rectangle())
+    }
+}
+
+struct FolderDropArea: View {
+    @Bindable var model: TransferViewModel
+    var didSelect: () -> Void = {}
+    @State private var isTargeted = false
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: "folder.badge.plus")
+            Text(model.canSelectFolder ? (isTargeted ? "Release to select folder" : "Drag & drop a folder here") : "Folder locked during transfer")
+                .fontWeight(.medium)
+            Text(model.canSelectFolder ? "Or use Choose folder" : "Stop the transfer to change folders")
+                .foregroundStyle(Palette.muted)
+        }
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity, minHeight: 104)
+        .padding(12)
+        .background(isTargeted && model.canSelectFolder ? Palette.border : Palette.background)
         .overlay {
             Rectangle()
                 .strokeBorder(
-                    isDropTargeted && canSelectFolder ? Palette.mint : .clear,
-                    lineWidth: 2
+                    model.canSelectFolder ? (isTargeted ? Palette.accent : Palette.muted) : Palette.border,
+                    style: StrokeStyle(lineWidth: 1, dash: [2, 5])
                 )
                 .allowsHitTesting(false)
         }
+        .contentShape(Rectangle())
         .dropDestination(for: URL.self) { urls, _ in
-            model.selectFolder(urls)
-        } isTargeted: { targeted in
-            isDropTargeted = targeted
-        }
+            let accepted = model.selectFolder(urls)
+            didSelect()
+            return accepted
+        } isTargeted: { isTargeted = $0 }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Folder drop area")
+        .accessibilityHint("Drop one local folder to select it for transfer")
     }
 }

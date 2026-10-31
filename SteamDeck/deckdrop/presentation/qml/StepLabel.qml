@@ -15,20 +15,21 @@ RowLayout {
     property bool done: false
     spacing: 12
     Text {
-        Layout.preferredWidth: 20
-        text: step.done ? "✓" : "○"
+        Layout.preferredWidth: 28
+        text: step.done ? "[x]" : "[ ]"
         color: step.done ? Theme.accent : Theme.muted
+        font.family: Theme.fontFamily
         font.pixelSize: Theme.textSize
     }
     ColumnLayout {
         Layout.fillWidth: true
         spacing: 4
-        Text { text: step.number; color: Theme.muted; font.pixelSize: Theme.textSize }
+        Text { text: step.number; color: Theme.muted; font.family: Theme.fontFamily; font.pixelSize: Theme.textSize }
         Text {
             Layout.fillWidth: true
             text: step.title
             color: Theme.text
-            font { pixelSize: Theme.textSize; weight: Font.Medium }
+            font { family: Theme.fontFamily; pixelSize: Theme.textSize; weight: Font.Medium }
             wrapMode: Text.Wrap
         }
     }
