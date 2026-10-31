@@ -1,4 +1,11 @@
 #!/bin/bash
+#
+#  install.sh
+#  DeckDrop
+#
+#  Created by Andrii Bryzhnychenko on 10/17/26.
+#
+
 set -euo pipefail
 receiver_dir="$(cd "$(dirname "$0")" && pwd)"
 python3 -m venv "$receiver_dir/.venv"

@@ -1,3 +1,10 @@
+//
+//  Theme.qml
+//  DeckDrop
+//
+//  Created by Andrii Bryzhnychenko on 10/18/26.
+//
+
 pragma Singleton
 import QtQuick
 

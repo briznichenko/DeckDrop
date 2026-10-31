@@ -1,3 +1,10 @@
+#
+#  test_quick_transfer.py
+#  DeckDrop
+#
+#  Created by Andrii Bryzhnychenko on 10/18/26.
+#
+
 import importlib.util
 import json
 import os

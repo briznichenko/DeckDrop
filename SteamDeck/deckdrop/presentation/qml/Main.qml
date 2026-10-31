@@ -1,3 +1,10 @@
+//
+//  Main.qml
+//  DeckDrop
+//
+//  Created by Andrii Bryzhnychenko on 10/17/26.
+//
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts

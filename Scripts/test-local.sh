@@ -1,4 +1,11 @@
 #!/bin/bash
+#
+#  test-local.sh
+#  DeckDrop
+#
+#  Created by Andrii Bryzhnychenko on 10/18/26.
+#
+
 set -euo pipefail
 project_dir="$(cd "$(dirname "$0")/.." && pwd)"
 check_dir="$(mktemp -d "${TMPDIR:-/tmp}/deckdrop-checks.XXXXXX")"

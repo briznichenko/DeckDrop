@@ -1,3 +1,10 @@
+#
+#  test_pairing.py
+#  DeckDrop
+#
+#  Created by Andrii Bryzhnychenko on 10/17/26.
+#
+
 import importlib.util
 import json
 import os

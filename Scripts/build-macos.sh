@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#  build.sh
+#  build-macos.sh
 #  DeckDrop
 #
 #  Created by Andrii Bryzhnychenko on 10/17/26.
